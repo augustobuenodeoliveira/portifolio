@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hive Participações — Análise de Vendas 2020–2022</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #11141b;
+    --surface2: #181c26;
+    --border: #1e2436;
+    --accent: #f0b429;
+    --accent2: #e05c34;
+    --accent3: #38bdf8;
+    --accent4: #a78bfa;
+    --green: #34d399;
+    --text: #e8ecf4;
+    --muted: #6b7594;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0d1017 0%, #111827 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-hex {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-head); font-weight: 800; font-size: 14px; color: #000;
+  }
+  .logo-text { font-family: var(--font-head); font-weight: 700; font-size: 18px; letter-spacing: 1px; }
+  .logo-sub { color: var(--muted); font-size: 12px; margin-left: 4px; }
+  .header-filters {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .filter-group { display: flex; align-items: center; gap: 8px; }
+  .filter-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  select, .btn-filter {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  select:hover, .btn-filter:hover { border-color: var(--accent); }
+  select:focus { outline: none; border-color: var(--accent); }
+  .btn-filter.active { background: var(--accent); color: #000; font-weight: 600; border-color: var(--accent); }
+
+  /* TABS NAV */
+  .tabs-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    background: none; border: none; color: var(--muted);
+    font-family: var(--font-body); font-size: 13px;
+    padding: 14px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-icon { font-size: 15px; }
+
+  /* MAIN */
+  main { padding: 2rem; max-width: 1600px; margin: 0 auto; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .kpi-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .kpi-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--card-accent, var(--accent));
+  }
+  .kpi-label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px; }
+  .kpi-value { font-family: var(--font-head); font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .kpi-sub { font-size: 12px; color: var(--muted); }
+  .kpi-badge {
+    display: inline-block; font-size: 11px; padding: 2px 8px;
+    border-radius: 20px; margin-top: 6px; font-weight: 600;
+  }
+  .badge-up { background: rgba(52,211,153,.15); color: var(--green); }
+  .badge-down { background: rgba(224,92,52,.15); color: var(--accent2); }
+
+  /* CHARTS GRID */
+  .charts-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .charts-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .charts-grid-1 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem;
+  }
+  .chart-card.span2 { grid-column: span 2; }
+  .chart-title {
+    font-family: var(--font-head);
+    font-weight: 700; font-size: 14px;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .chart-sub { color: var(--muted); font-size: 12px; margin-bottom: 1.2rem; }
+  .chart-wrap { position: relative; }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    text-align: left; padding: 10px 14px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--muted); border-bottom: 1px solid var(--border);
+    font-family: var(--font-body); font-weight: 500;
+  }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface2); }
+  .rank { color: var(--muted); font-size: 11px; width: 28px; }
+  .bar-cell { display: flex; align-items: center; gap: 10px; }
+  .mini-bar { height: 5px; border-radius: 3px; background: var(--accent); min-width: 4px; }
+  .tag {
+    display: inline-block; font-size: 11px; padding: 2px 8px;
+    border-radius: 4px; font-weight: 500;
+  }
+  .tag-notebook { background: rgba(240,180,41,.15); color: var(--accent); }
+  .tag-celular { background: rgba(56,189,248,.15); color: var(--accent3); }
+  .tag-monitor { background: rgba(167,139,250,.15); color: var(--accent4); }
+  .tag-teclado { background: rgba(52,211,153,.15); color: var(--green); }
+  .tag-mouse { background: rgba(224,92,52,.15); color: var(--accent2); }
+  .tag-outros { background: rgba(107,117,148,.15); color: var(--muted); }
+
+  /* INSIGHTS */
+  .insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .insight-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--card-accent, var(--accent));
+    border-radius: 8px;
+    padding: 1.2rem;
+  }
+  .insight-title { font-family: var(--font-head); font-size: 13px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+  .insight-body { color: #aab0c4; font-size: 13px; line-height: 1.6; }
+  .insight-num { font-family: var(--font-head); font-size: 22px; font-weight: 800; color: var(--card-accent, var(--accent)); }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: var(--font-head); font-weight: 800; font-size: 11px;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* PROGRESS BAR */
+  .prog-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .prog-label { font-size: 13px; min-width: 140px; }
+  .prog-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .prog-bar-fill { height: 100%; border-radius: 4px; background: var(--fill, var(--accent)); transition: width 1s ease; }
+  .prog-val { font-size: 13px; font-weight: 600; min-width: 80px; text-align: right; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center; padding: 2rem;
+    color: var(--muted); font-size: 12px;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .charts-grid-2, .charts-grid-3 { grid-template-columns: 1fr; }
+    .chart-card.span2 { grid-column: span 1; }
+    .header-filters { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">
+    <div class="logo-hex">H</div>
+    <div>
+      <span class="logo-text">HIVE</span>
+      <span class="logo-sub">Participações</span>
+    </div>
+  </div>
+  <div class="header-filters">
+    <div class="filter-group">
+      <span class="filter-label">Período</span>
+      <select id="filterAno" onchange="aplicarFiltros()">
+        <option value="todos">Todos os anos</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Canal</span>
+      <select id="filterCanal" onchange="aplicarFiltros()">
+        <option value="todos">Todos os canais</option>
+        <option value="Física">Loja Física</option>
+        <option value="Online">Online</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Categoria</span>
+      <select id="filterCategoria" onchange="aplicarFiltros()">
+        <option value="todos">Todas</option>
+        <option value="Notebook">Notebook</option>
+        <option value="Celular">Celular</option>
+        <option value="Monitor">Monitor</option>
+        <option value="Teclado">Teclado</option>
+        <option value="Mouse">Mouse</option>
+        <option value="Casaco">Casaco</option>
+        <option value="Camisa">Camisa</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabs-nav">
+  <button class="tab-btn active" onclick="showTab('visao-geral', this)"><span class="tab-icon">📊</span> Visão Geral</button>
+  <button class="tab-btn" onclick="showTab('produtos', this)"><span class="tab-icon">📦</span> Produtos</button>
+  <button class="tab-btn" onclick="showTab('lojas', this)"><span class="tab-icon">🏪</span> Lojas & Canais</button>
+  <button class="tab-btn" onclick="showTab('geografico', this)"><span class="tab-icon">🌍</span> Geográfico</button>
+  <button class="tab-btn" onclick="showTab('devolucoes', this)"><span class="tab-icon">🔄</span> Devoluções</button>
+  <button class="tab-btn" onclick="showTab('insights', this)"><span class="tab-icon">💡</span> Insights & Recomendações</button>
+</nav>
+
+<main>
+
+<!-- ======== TAB: VISÃO GERAL ======== -->
+<div id="visao-geral" class="tab-panel active">
+
+  <div class="kpi-grid" id="kpi-cards">
+    <div class="kpi-card" style="--card-accent: var(--accent)">
+      <div class="kpi-label">Receita Total</div>
+      <div class="kpi-value" id="kpi-receita">R$ 15,2M</div>
+      <div class="kpi-sub">2020 — 2022</div>
+      <span class="kpi-badge badge-up">▲ +223% vs 2020</span>
+    </div>
+    <div class="kpi-card" style="--card-accent: var(--green)">
+      <div class="kpi-label">Lucro Bruto</div>
+      <div class="kpi-value" id="kpi-lucro">R$ 11,4M</div>
+      <div class="kpi-sub">Margem de <strong id="kpi-margem">74,6%</strong></div>
+      <span class="kpi-badge badge-up">▲ Alta rentabilidade</span>
+    </div>
+    <div class="kpi-card" style="--card-accent: var(--accent3)">
+      <div class="kpi-label">Pedidos</div>
+      <div class="kpi-value" id="kpi-pedidos">25.164</div>
+      <div class="kpi-sub">Ticket médio: <strong id="kpi-ticket">R$ 605</strong></div>
+      <span class="kpi-badge badge-up">▲ +351% vs 2020</span>
+    </div>
+    <div class="kpi-card" style="--card-accent: var(--accent4)">
+      <div class="kpi-label">Unidades Vendidas</div>
+      <div class="kpi-value" id="kpi-qtd">84.174</div>
+      <div class="kpi-sub">Itens únicos: 293</div>
+      <span class="kpi-badge badge-up">▲ +1624% vs 2020</span>
+    </div>
+    <div class="kpi-card" style="--card-accent: var(--accent2)">
+      <div class="kpi-label">Clientes Únicos</div>
+      <div class="kpi-value" id="kpi-clientes">17.416</div>
+      <div class="kpi-sub">Base ativa</div>
+      <span class="kpi-badge badge-up">▲ crescimento sólido</span>
+    </div>
+    <div class="kpi-card" style="--card-accent: #f87171">
+      <div class="kpi-label">Taxa de Devolução</div>
+      <div class="kpi-value" id="kpi-dev">2,17%</div>
+      <div class="kpi-sub">1.828 un. devolvidas</div>
+      <span class="kpi-badge badge-down">⚠ 88% por defeito</span>
+    </div>
+  </div>
+
+  <!-- Receita mensal -->
+  <div class="charts-grid-1">
+    <div class="chart-card">
+      <div class="chart-title">Evolução de Receita & Lucro Mensal</div>
+      <div class="chart-sub">Receita bruta e lucro por mês — todos os anos consolidados</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartReceitaMensal"></canvas></div>
+    </div>
+  </div>
+
+  <div class="charts-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">Receita por Ano</div>
+      <div class="chart-sub">Crescimento anual acumulado</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chartReceitaAno"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Pedidos & Ticket Médio por Ano</div>
+      <div class="chart-sub">Volume de transações vs valor médio</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chartTicket"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ======== TAB: PRODUTOS ======== -->
+<div id="produtos" class="tab-panel">
+
+  <div class="charts-grid-2" style="margin-bottom:1.5rem">
+    <div class="chart-card">
+      <div class="chart-title">Receita por Categoria</div>
+      <div class="chart-sub">Distribuição percentual por tipo de produto</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartTipoProduto"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Margem Bruta por Categoria (%)</div>
+      <div class="chart-sub">Rentabilidade por segmento</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartMargem"></canvas></div>
+    </div>
+  </div>
+
+  <div class="charts-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">Top 8 Marcas por Receita</div>
+      <div class="chart-sub">Performance das principais marcas</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartMarcas"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Top 10 Produtos por Receita</div>
+      <div class="chart-sub">Produtos com maior faturamento</div>
+      <div style="max-height:280px; overflow-y:auto">
+        <table class="data-table" id="tabelaProdutos"></table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ======== TAB: LOJAS & CANAIS ======== -->
+<div id="lojas" class="tab-panel">
+
+  <div class="charts-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">Canal de Vendas: Físico vs Online</div>
+      <div class="chart-sub">Participação na receita total</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartCanal"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Receita por Canal — Evolução Anual</div>
+      <div class="chart-sub">Comparativo físico vs online por ano</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartCanalAno"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:1.5rem">
+    <div class="chart-title">Top 15 Lojas por Receita</div>
+    <div class="chart-sub">Ranking de desempenho das lojas</div>
+    <div class="chart-wrap" style="height:320px"><canvas id="chartTopLojas"></canvas></div>
+  </div>
+
+</div>
+
+<!-- ======== TAB: GEOGRÁFICO ======== -->
+<div id="geografico" class="tab-panel">
+
+  <div class="charts-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">Receita por Continente</div>
+      <div class="chart-sub">Distribuição geográfica global</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="chartContinente"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Top 10 Países por Receita</div>
+      <div class="chart-sub">Países com maior faturamento</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="chartPaises"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Participação por Continente</div>
+    <div class="chart-sub">% da receita total</div>
+    <div id="progContinentes" style="padding-top:1rem"></div>
+  </div>
+
+</div>
+
+<!-- ======== TAB: DEVOLUÇÕES ======== -->
+<div id="devolucoes" class="tab-panel">
+
+  <div class="kpi-grid">
+    <div class="kpi-card" style="--card-accent: #f87171">
+      <div class="kpi-label">Total Devolvido</div>
+      <div class="kpi-value">R$ 433K</div>
+      <div class="kpi-sub">Valor total impactado</div>
+    </div>
+    <div class="kpi-card" style="--card-accent: var(--accent2)">
+      <div class="kpi-label">Unidades</div>
+      <div class="kpi-value">1.828</div>
+      <div class="kpi-sub">Itens devolvidos</div>
+    </div>
+    <div class="kpi-card" style="--card-accent: var(--accent)">
+      <div class="kpi-label">Taxa Geral</div>
+      <div class="kpi-value">2,17%</div>
+      <div class="kpi-sub">Das unidades vendidas</div>
+    </div>
+    <div class="kpi-card" style="--card-accent: #f87171">
+      <div class="kpi-label">Produto com Defeito</div>
+      <div class="kpi-value">88,1%</div>
+      <div class="kpi-sub">Principal motivo</div>
+    </div>
+  </div>
+
+  <div class="charts-grid-2">
+    <div class="chart-card">
+      <div class="chart-title">Devoluções por Motivo</div>
+      <div class="chart-sub">Distribuição dos motivos de devolução</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartDevMotivo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Evolução Mensal de Devoluções</div>
+      <div class="chart-sub">Quantidade devolvida por mês</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chartDevMensal"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ======== TAB: INSIGHTS ======== -->
+<div id="insights" class="tab-panel">
+
+  <div class="section-title">Principais Descobertas</div>
+  <div class="insight-grid">
+    <div class="insight-card" style="--card-accent: var(--accent)">
+      <div class="insight-title">📈 Crescimento Explosivo</div>
+      <div class="insight-body">
+        A receita cresceu <span class="insight-num">+223%</span> entre 2020 e 2022, saltando de R$ 2,2M para R$ 7,1M. O ponto de inflexão foi o 2º semestre de 2021, quando o volume de pedidos cresceu ~10x em relação ao 1º semestre.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: var(--green)">
+      <div class="insight-title">💰 Margem Bruta Elevada</div>
+      <div class="insight-body">
+        Margem bruta de <span class="insight-num">74,6%</span> é excepcionalmente alta. Notebooks (75,9%) e Celulares (75,7%) lideram. Vestuário (Camisa 55,8% e Casaco 57,7%) puxa a margem para baixo — oportunidade de revisão de precificação.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: var(--accent3)">
+      <div class="insight-title">🏪 Domínio do Canal Físico</div>
+      <div class="insight-body">
+        Lojas físicas respondem por <span class="insight-num">83,6%</span> da receita. O canal online, apesar de representar apenas 16,4%, cresce consistentemente — ponto de atenção estratégico para expansão digital.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: var(--accent4)">
+      <div class="insight-title">🌎 Concentração nos EUA</div>
+      <div class="insight-body">
+        Estados Unidos representam <span class="insight-num">58,7%</span> de toda a receita (R$ 8,9M). América do Norte concentra 61% do faturamento. Europa e Ásia são mercados secundários relevantes com potencial de crescimento.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: var(--accent2)">
+      <div class="insight-title">⚠️ Alerta: Defeitos em Produtos</div>
+      <div class="insight-body">
+        <span class="insight-num">88%</span> das devoluções são por "Produto com defeito" — 1.600 ocorrências. Isso indica falhas graves de qualidade/fornecedor e gera impacto financeiro de R$ 391K. Demanda ação imediata junto aos fornecedores.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: #f87171">
+      <div class="insight-title">📉 Queda no Ticket Médio</div>
+      <div class="insight-body">
+        O ticket médio caiu de <span class="insight-num">R$ 830</span> em 2020 para R$ 596 em 2022 (-28%). Isso indica um mix shift para produtos de menor valor (Mouse, Teclado) ganhando maior participação no volume total.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:2rem">Recomendações Estratégicas</div>
+  <div class="insight-grid">
+    <div class="insight-card" style="--card-accent: var(--accent)">
+      <div class="insight-title">🔧 1. Atacar o Problema de Defeitos</div>
+      <div class="insight-body">
+        Com 88% das devoluções por defeito, é urgente auditar a cadeia de fornecimento. Implementar controle de qualidade na entrada de mercadoria e criar SLA com fornecedores. Meta: reduzir taxa de defeito em 50% em 12 meses.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: var(--green)">
+      <div class="insight-title">🌐 2. Expandir o Canal Online</div>
+      <div class="insight-body">
+        O canal online cresce consistentemente mas ainda é subexplorado (16%). Investir em marketing digital, experiência de compra e logística para o e-commerce pode dobrar a participação em 2 anos com menor custo operacional.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: var(--accent3)">
+      <div class="insight-title">🌍 3. Diversificar Geograficamente</div>
+      <div class="insight-body">
+        A dependência dos EUA (59%) é um risco de concentração. Europa e Ásia mostram tração positiva. Desenvolver estratégia regional para UK, Alemanha e China — mercados com potencial não explorado nos dados.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: var(--accent4)">
+      <div class="insight-title">💎 4. Defender a Margem de Notebooks</div>
+      <div class="insight-body">
+        Notebooks representam 49% da receita com a maior margem (75,9%). É o produto âncora. Estratégias de upsell, bundles com acessórios (teclado + mouse) e garantia estendida podem elevar o ticket médio de volta a 2020.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: #f59e0b">
+      <div class="insight-title">👕 5. Reavaliar o Segmento de Vestuário</div>
+      <div class="insight-body">
+        Camisas e Casacos têm a menor margem (56–58%) e volume modesto. Ou se investe em escala para diluir custos, ou se redireciona o mix para categorias de maior rentabilidade como Notebooks e Celulares.
+      </div>
+    </div>
+    <div class="insight-card" style="--card-accent: var(--accent2)">
+      <div class="insight-title">🔁 6. Monitorar Sazonalidade</div>
+      <div class="insight-body">
+        Dezembro é consistentemente o melhor mês. Janeiro-Fevereiro mostram queda. Planejar campanhas promocionais no 1º trimestre e reforçar estoque para Q4 pode maximizar a receita nos picos sazonais.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</main>
+
+<footer class="footer">
+  Análise elaborada por <strong>Augusto</strong> · Hive Participações · Teste Técnico Analista de Dados · Dados: 2020–2022
+</footer>
+
+<script>
+// ===================== DATA =====================
+const DATA = {
+  mensais: [{"Ano":2020,"Mes":1,"AnoMes":"2020-01","Receita":206816.0,"Lucro":152790.7,"Qtd":184,"Pedidos":184},{"Ano":2020,"Mes":2,"AnoMes":"2020-02","Receita":198015.0,"Lucro":146938.4,"Qtd":165,"Pedidos":165},{"Ano":2020,"Mes":3,"AnoMes":"2020-03","Receita":227242.0,"Lucro":169002.8,"Qtd":198,"Pedidos":198},{"Ano":2020,"Mes":4,"AnoMes":"2020-04","Receita":234126.0,"Lucro":173410.9,"Qtd":204,"Pedidos":204},{"Ano":2020,"Mes":5,"AnoMes":"2020-05","Receita":233014.0,"Lucro":173225.0,"Qtd":206,"Pedidos":206},{"Ano":2020,"Mes":6,"AnoMes":"2020-06","Receita":240478.0,"Lucro":178684.4,"Qtd":212,"Pedidos":212},{"Ano":2020,"Mes":7,"AnoMes":"2020-07","Receita":125730.03,"Lucro":95451.53,"Qtd":247,"Pedidos":247},{"Ano":2020,"Mes":8,"AnoMes":"2020-08","Receita":150265.26,"Lucro":114171.96,"Qtd":278,"Pedidos":278},{"Ano":2020,"Mes":9,"AnoMes":"2020-09","Receita":112228.91,"Lucro":84551.51,"Qtd":196,"Pedidos":196},{"Ano":2020,"Mes":10,"AnoMes":"2020-10","Receita":131318.6,"Lucro":99620.4,"Qtd":223,"Pedidos":223},{"Ano":2020,"Mes":11,"AnoMes":"2020-11","Receita":114326.09,"Lucro":86042.79,"Qtd":191,"Pedidos":191},{"Ano":2020,"Mes":12,"AnoMes":"2020-12","Receita":210200.52,"Lucro":159121.92,"Qtd":326,"Pedidos":326},{"Ano":2021,"Mes":1,"AnoMes":"2021-01","Receita":142520.08,"Lucro":108509.28,"Qtd":242,"Pedidos":242},{"Ano":2021,"Mes":2,"AnoMes":"2021-02","Receita":158823.3,"Lucro":120581.3,"Qtd":267,"Pedidos":267},{"Ano":2021,"Mes":3,"AnoMes":"2021-03","Receita":161595.85,"Lucro":122140.95,"Qtd":266,"Pedidos":266},{"Ano":2021,"Mes":4,"AnoMes":"2021-04","Receita":186502.86,"Lucro":141091.06,"Qtd":290,"Pedidos":290},{"Ano":2021,"Mes":5,"AnoMes":"2021-05","Receita":210909.37,"Lucro":159884.67,"Qtd":329,"Pedidos":329},{"Ano":2021,"Mes":6,"AnoMes":"2021-06","Receita":201593.83,"Lucro":152812.13,"Qtd":312,"Pedidos":312},{"Ano":2021,"Mes":7,"AnoMes":"2021-07","Receita":484413.87,"Lucro":366295.37,"Qtd":1954,"Pedidos":1954},{"Ano":2021,"Mes":8,"AnoMes":"2021-08","Receita":667396.28,"Lucro":493752.18,"Qtd":5958,"Pedidos":5958},{"Ano":2021,"Mes":9,"AnoMes":"2021-09","Receita":769138.4,"Lucro":571558.8,"Qtd":5970,"Pedidos":5970},{"Ano":2021,"Mes":10,"AnoMes":"2021-10","Receita":826246.46,"Lucro":613674.46,"Qtd":6387,"Pedidos":6387},{"Ano":2021,"Mes":11,"AnoMes":"2021-11","Receita":892223.04,"Lucro":664520.74,"Qtd":6332,"Pedidos":6332},{"Ano":2021,"Mes":12,"AnoMes":"2021-12","Receita":1281497.34,"Lucro":955832.84,"Qtd":7923,"Pedidos":7923},{"Ano":2022,"Mes":1,"AnoMes":"2022-01","Receita":994701.35,"Lucro":737774.75,"Qtd":7020,"Pedidos":7020},{"Ano":2022,"Mes":2,"AnoMes":"2022-02","Receita":984548.49,"Lucro":732989.29,"Qtd":6828,"Pedidos":6828},{"Ano":2022,"Mes":3,"AnoMes":"2022-03","Receita":1097108.55,"Lucro":817171.45,"Qtd":7327,"Pedidos":7327},{"Ano":2022,"Mes":4,"AnoMes":"2022-04","Receita":1178353.31,"Lucro":878993.31,"Qtd":7680,"Pedidos":7680},{"Ano":2022,"Mes":5,"AnoMes":"2022-05","Receita":1388069.88,"Lucro":1035758.48,"Qtd":8199,"Pedidos":8199},{"Ano":2022,"Mes":6,"AnoMes":"2022-06","Receita":1416677.89,"Lucro":1058882.29,"Qtd":8260,"Pedidos":8260}],
+  anuais: [{"Ano":2020,"Receita":2183760.41,"Lucro":1633012.31,"Qtd":2630,"Pedidos":2630,"Clientes":2630},{"Ano":2021,"Receita":5982860.68,"Lucro":4470653.78,"Qtd":36230,"Pedidos":10695,"Clientes":10695},{"Ano":2022,"Receita":7059459.47,"Lucro":5261569.57,"Qtd":45314,"Pedidos":11839,"Clientes":11839}],
+  tipoProduto: [{"Tipo do Produto":"Notebook","Receita":7469356.74,"Lucro":5670102.34,"Qtd":6262,"Margem":75.9},{"Tipo do Produto":"Celular","Receita":4429261.0,"Lucro":3352852.3,"Qtd":7667,"Margem":75.7},{"Tipo do Produto":"Monitor","Receita":1705621.95,"Lucro":1229083.85,"Qtd":7543,"Margem":72.1},{"Tipo do Produto":"Teclado","Receita":758816.58,"Lucro":559327.08,"Qtd":14301,"Margem":73.7},{"Tipo do Produto":"Mouse","Receita":427425.79,"Lucro":305454.89,"Qtd":35965,"Margem":71.5},{"Tipo do Produto":"Casaco","Receita":288666.0,"Lucro":166496.9,"Qtd":6680,"Margem":57.7},{"Tipo do Produto":"Camisa","Receita":146932.5,"Lucro":81918.3,"Qtd":5756,"Margem":55.8}],
+  topProdutos: [{"Produto":"Notebook Asus ROG Zephyrus Duo 15 - Prata","Receita":1021854.0,"Qtd":146,"Lucro":790854.0},{"Produto":"Dell Gamer G11-i1000 - Amarelo","Receita":856632.0,"Qtd":168,"Lucro":663192.0},{"Produto":"Teclado sem fio V320 - Preto","Receita":648780.0,"Qtd":5898,"Lucro":478380.0},{"Produto":"Monitor de jogos Nano IPS 34GN850-B 34'' - Prata","Receita":549043.05,"Qtd":695,"Lucro":393993.05},{"Produto":"Monitor Gamer 24'' FHD 75HZ - Branco","Receita":547972.6,"Qtd":2740,"Lucro":393122.6},{"Produto":"HP Spectre X360 - Azul","Receita":499900.0,"Qtd":100,"Lucro":399900.0},{"Produto":"iPhone 12 Mini 512GB - Prata","Receita":497514.0,"Qtd":586,"Lucro":394114.0},{"Produto":"Razer 17 Blade Pro 4k - Preto","Receita":447944.0,"Qtd":56,"Lucro":391944.0},{"Produto":"Macrbook Pro 16.2' M1 Max - Azul","Receita":402821.0,"Qtd":79,"Lucro":322821.0},{"Produto":"Samsung 15.6' Galaxy Book2 Pro - Amarelo","Receita":399597.04,"Qtd":296,"Lucro":313597.04}],
+  marcas: [{"Marca":"Apple","Receita":4449787.0,"Qtd":5313},{"Marca":"Asus","Receita":1444505.42,"Qtd":616},{"Marca":"LG","Receita":1421291.05,"Qtd":11280},{"Marca":"Samsung","Receita":1346653.64,"Qtd":5331},{"Marca":"Dell","Receita":1316404.13,"Qtd":5896},{"Marca":"HP","Receita":1293543.84,"Qtd":1667},{"Marca":"Razer","Receita":793400.0,"Qtd":200},{"Marca":"Microsoft","Receita":567764.0,"Qtd":502}],
+  continentes: [{"Continente":"América do Norte","Receita":9297987.22,"Qtd":50706},{"Continente":"Ásia","Receita":2928697.88,"Qtd":16474},{"Continente":"Europa","Receita":2838032.47,"Qtd":16100},{"Continente":"Oceania","Receita":161362.99,"Qtd":894}],
+  paises: [{"País":"Estados Unidos","Receita":8945197.69,"Qtd":48694},{"País":"China","Receita":1674263.99,"Qtd":9314},{"País":"Alemanha","Receita":1069916.71,"Qtd":6260},{"País":"França","Receita":812565.37,"Qtd":4556},{"País":"Reino Unido","Receita":388059.72,"Qtd":2268},{"País":"Canadá","Receita":352789.53,"Qtd":2012},{"País":"Japão","Receita":352068.52,"Qtd":1800},{"País":"Austrália","Receita":161362.99,"Qtd":894},{"País":"Índia","Receita":154018.29,"Qtd":869},{"País":"Rússia","Receita":135358.11,"Qtd":717}],
+  tipoLoja: [{"Tipo":"Física","Receita":12727027.13,"Qtd":69886,"Lucro":9506642.13},{"Tipo":"Online","Receita":2499053.43,"Qtd":14288,"Lucro":1858593.53}],
+  topLojas: [{"Nome da Loja":"Loja Catalog","Receita":1053605.04,"Qtd":5213},{"Nome da Loja":"Loja North America Online","Receita":854544.57,"Qtd":4927},{"Nome da Loja":"Loja Europe Online","Receita":827454.52,"Qtd":4799},{"Nome da Loja":"Loja Asia Online","Receita":817054.34,"Qtd":4562},{"Nome da Loja":"Loja North America Reseller","Receita":677311.44,"Qtd":3802},{"Nome da Loja":"Loja Europe Reseller","Receita":652580.69,"Qtd":3641},{"Nome da Loja":"Loja Asia Reseller","Receita":563263.79,"Qtd":3264},{"Nome da Loja":"Loja Yerevan","Receita":75492.25,"Qtd":275},{"Nome da Loja":"Loja Shanghai No.2","Receita":74992.45,"Qtd":313},{"Nome da Loja":"Loja Tokyo No.1","Receita":73815.17,"Qtd":320},{"Nome da Loja":"Loja Sydney No.1","Receita":72760.29,"Qtd":292},{"Nome da Loja":"Loja Shanghai No.1","Receita":71858.3,"Qtd":320},{"Nome da Loja":"Loja Beijing No.1","Receita":71769.17,"Qtd":302},{"Nome da Loja":"Loja Frankfurt No.1","Receita":71531.4,"Qtd":328},{"Nome da Loja":"Loja London No.1","Receita":70803.77,"Qtd":325}],
+  devMotivo: [{"Motivo Devolução":"Produto com defeito","Qtd":1618,"Valor":391173.82,"Count":1600},{"Motivo Devolução":"Arrependimento","Qtd":105,"Valor":28382.91,"Count":104},{"Motivo Devolução":"Troca Indisponível","Qtd":54,"Valor":2032.6,"Count":54},{"Motivo Devolução":"Não informado","Qtd":51,"Valor":11443.54,"Count":51}],
+  devMensal: [{"Ano":2020,"Mes":1,"AnoMes":"2020-01","Qtd":0,"Valor":0},{"Ano":2020,"Mes":2,"AnoMes":"2020-02","Qtd":3,"Valor":3189.0},{"Ano":2020,"Mes":3,"AnoMes":"2020-03","Qtd":2,"Valor":1998.0},{"Ano":2020,"Mes":4,"AnoMes":"2020-04","Qtd":7,"Valor":16839.72},{"Ano":2020,"Mes":5,"AnoMes":"2020-05","Qtd":7,"Valor":13609.0},{"Ano":2020,"Mes":6,"AnoMes":"2020-06","Qtd":6,"Valor":10100.0},{"Ano":2020,"Mes":7,"AnoMes":"2020-07","Qtd":14,"Valor":9832.0},{"Ano":2020,"Mes":8,"AnoMes":"2020-08","Qtd":11,"Valor":8025.0},{"Ano":2020,"Mes":9,"AnoMes":"2020-09","Qtd":9,"Valor":3564.0},{"Ano":2020,"Mes":10,"AnoMes":"2020-10","Qtd":12,"Valor":4254.0},{"Ano":2020,"Mes":11,"AnoMes":"2020-11","Qtd":8,"Valor":3492.0},{"Ano":2020,"Mes":12,"AnoMes":"2020-12","Qtd":7,"Valor":4213.0},{"Ano":2021,"Mes":1,"AnoMes":"2021-01","Qtd":7,"Valor":3318.0},{"Ano":2021,"Mes":2,"AnoMes":"2021-02","Qtd":14,"Valor":7215.0},{"Ano":2021,"Mes":3,"AnoMes":"2021-03","Qtd":12,"Valor":5922.0},{"Ano":2021,"Mes":4,"AnoMes":"2021-04","Qtd":17,"Valor":9945.0},{"Ano":2021,"Mes":5,"AnoMes":"2021-05","Qtd":15,"Valor":7935.0},{"Ano":2021,"Mes":6,"AnoMes":"2021-06","Qtd":19,"Valor":9405.0},{"Ano":2021,"Mes":7,"AnoMes":"2021-07","Qtd":44,"Valor":12276.0},{"Ano":2021,"Mes":8,"AnoMes":"2021-08","Qtd":109,"Valor":25383.8},{"Ano":2021,"Mes":9,"AnoMes":"2021-09","Qtd":107,"Valor":23016.0},{"Ano":2021,"Mes":10,"AnoMes":"2021-10","Qtd":127,"Valor":27783.0},{"Ano":2021,"Mes":11,"AnoMes":"2021-11","Qtd":152,"Valor":28584.0},{"Ano":2021,"Mes":12,"AnoMes":"2021-12","Qtd":147,"Valor":31761.0},{"Ano":2022,"Mes":1,"AnoMes":"2022-01","Qtd":136,"Valor":30396.0},{"Ano":2022,"Mes":2,"AnoMes":"2022-02","Qtd":141,"Valor":30279.0},{"Ano":2022,"Mes":3,"AnoMes":"2022-03","Qtd":163,"Valor":36039.0},{"Ano":2022,"Mes":4,"AnoMes":"2022-04","Qtd":180,"Valor":41778.0},{"Ano":2022,"Mes":5,"AnoMes":"2022-05","Qtd":180,"Valor":33984.0},{"Ano":2022,"Mes":6,"AnoMes":"2022-06","Qtd":172,"Valor":30797.35}]
+};
+
+// ===================== COLORS =====================
+const COLORS = {
+  accent:  '#f0b429',
+  accent2: '#e05c34',
+  accent3: '#38bdf8',
+  accent4: '#a78bfa',
+  green:   '#34d399',
+  muted:   '#6b7594',
+  border:  '#1e2436',
+  palette: ['#f0b429','#38bdf8','#a78bfa','#34d399','#e05c34','#fb923c','#f472b6']
+};
+
+Chart.defaults.color = '#6b7594';
+Chart.defaults.borderColor = '#1e2436';
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+function fmtBRL(v) {
+  if (v >= 1e6) return 'R$ ' + (v/1e6).toFixed(1) + 'M';
+  if (v >= 1e3) return 'R$ ' + (v/1e3).toFixed(0) + 'K';
+  return 'R$ ' + v.toFixed(0);
+}
+function fmtNum(v) {
+  return v.toLocaleString('pt-BR');
+}
+
+// ===================== FILTROS =====================
+let activeFilters = { ano: 'todos', canal: 'todos', categoria: 'todos' };
+
+function aplicarFiltros() {
+  activeFilters.ano = document.getElementById('filterAno').value;
+  activeFilters.canal = document.getElementById('filterCanal').value;
+  activeFilters.categoria = document.getElementById('filterCategoria').value;
+  renderAllCharts();
+}
+
+function filterMensais() {
+  let d = DATA.mensais;
+  if (activeFilters.ano !== 'todos') d = d.filter(r => r.Ano == activeFilters.ano);
+  return d;
+}
+
+// ===================== TABS =====================
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===================== CHARTS =====================
+const charts = {};
+
+function mkChart(id, config) {
+  if (charts[id]) charts[id].destroy();
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  charts[id] = new Chart(ctx, config);
+}
+
+function renderAllCharts() {
+  renderVisaoGeral();
+  renderProdutos();
+  renderLojas();
+  renderGeoGrafico();
+  renderDevolucoes();
+  renderTabela();
+  renderProgressBars();
+}
+
+// --- VISÃO GERAL ---
+function renderVisaoGeral() {
+  const mensais = filterMensais();
+  const labels = mensais.map(r => r.AnoMes);
+  const receitas = mensais.map(r => r.Receita);
+  const lucros = mensais.map(r => r.Lucro);
+
+  mkChart('chartReceitaMensal', {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Receita', data: receitas, backgroundColor: 'rgba(240,180,41,0.7)', borderRadius: 3, order: 2 },
+        { label: 'Lucro', data: lucros, type: 'line', borderColor: COLORS.green, backgroundColor: 'rgba(52,211,153,0.1)', fill: true, tension: 0.4, pointRadius: 2, order: 1 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw) } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 12, font: { size: 11 } } },
+        y: { grid: { color: '#1e2436' }, ticks: { callback: v => fmtBRL(v) } }
+      }
+    }
+  });
+
+  const anos = DATA.anuais;
+  mkChart('chartReceitaAno', {
+    type: 'bar',
+    data: {
+      labels: anos.map(r => r.Ano),
+      datasets: [
+        { label: 'Receita', data: anos.map(r => r.Receita), backgroundColor: [COLORS.muted, COLORS.accent3, COLORS.accent], borderRadius: 6 },
+        { label: 'Lucro', data: anos.map(r => r.Lucro), backgroundColor: ['rgba(52,211,153,.3)','rgba(52,211,153,.5)','rgba(52,211,153,.85)'], borderRadius: 6 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw) } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#1e2436' }, ticks: { callback: v => fmtBRL(v) } }
+      }
+    }
+  });
+
+  const ticket2020 = 830.33, ticket2021 = 559.41, ticket2022 = 596.29;
+  mkChart('chartTicket', {
+    type: 'bar',
+    data: {
+      labels: ['2020','2021','2022'],
+      datasets: [
+        { label: 'Pedidos', data: anos.map(r => r.Pedidos), backgroundColor: 'rgba(56,189,248,0.6)', borderRadius: 6, yAxisID: 'y' },
+        { label: 'Ticket Médio (R$)', data: [ticket2020, ticket2021, ticket2022], type: 'line', borderColor: COLORS.accent, backgroundColor: 'transparent', pointBackgroundColor: COLORS.accent, tension: 0.3, yAxisID: 'y1', pointRadius: 5 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label.includes('Ticket') ? ' R$ ' + ctx.raw.toFixed(0) : ' ' + fmtNum(ctx.raw) } } },
+      scales: {
+        y: { grid: { color: '#1e2436' }, ticks: { callback: v => fmtNum(v) }, position: 'left' },
+        y1: { grid: { display: false }, ticks: { callback: v => 'R$ ' + v.toFixed(0) }, position: 'right' },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// --- PRODUTOS ---
+function renderProdutos() {
+  const tipos = DATA.tipoProduto;
+  mkChart('chartTipoProduto', {
+    type: 'doughnut',
+    data: {
+      labels: tipos.map(r => r['Tipo do Produto']),
+      datasets: [{ data: tipos.map(r => r.Receita), backgroundColor: COLORS.palette, borderWidth: 2, borderColor: '#11141b' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { padding: 12, font: { size: 12 } } },
+        tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw) + ' (' + (ctx.raw / DATA.tipoProduto.reduce((a,r)=>a+r.Receita,0)*100).toFixed(1) + '%)' } }
+      }
+    }
+  });
+
+  mkChart('chartMargem', {
+    type: 'bar',
+    data: {
+      labels: tipos.map(r => r['Tipo do Produto']),
+      datasets: [{ label: 'Margem Bruta %', data: tipos.map(r => r.Margem), backgroundColor: tipos.map(r => r.Margem > 70 ? COLORS.green : COLORS.accent2), borderRadius: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.raw + '%' } } },
+      scales: {
+        x: { grid: { color: '#1e2436' }, min: 0, max: 100, ticks: { callback: v => v + '%' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  const marcas = DATA.marcas;
+  mkChart('chartMarcas', {
+    type: 'bar',
+    data: {
+      labels: marcas.map(r => r.Marca),
+      datasets: [{ label: 'Receita', data: marcas.map(r => r.Receita), backgroundColor: COLORS.palette, borderRadius: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw) } } },
+      scales: {
+        x: { grid: { color: '#1e2436' }, ticks: { callback: v => fmtBRL(v) } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// --- TABELA PRODUTOS ---
+function renderTabela() {
+  const tbl = document.getElementById('tabelaProdutos');
+  if (!tbl) return;
+  const maxR = DATA.topProdutos[0].Receita;
+  const tagMap = {'Notebook':'tag-notebook','Celular':'tag-celular','Monitor':'tag-monitor','Teclado':'tag-teclado','Mouse':'tag-mouse'};
+  tbl.innerHTML = `<thead><tr><th class="rank">#</th><th>Produto</th><th>Receita</th><th>Qtd</th></tr></thead><tbody>` +
+    DATA.topProdutos.map((r,i) => {
+      const label = r.Produto.split(' ').slice(0,2).join(' ');
+      const pct = (r.Receita/maxR*100).toFixed(0);
+      return `<tr><td class="rank">${i+1}</td><td><div class="bar-cell"><div class="mini-bar" style="width:${pct}px"></div>${r.Produto.substring(0,35)}…</div></td><td style="color:var(--accent);font-weight:600">${fmtBRL(r.Receita)}</td><td>${fmtNum(r.Qtd)}</td></tr>`;
+    }).join('') + `</tbody>`;
+}
+
+// --- LOJAS ---
+function renderLojas() {
+  const canal = DATA.tipoLoja;
+  const total = canal.reduce((a,r)=>a+r.Receita,0);
+  mkChart('chartCanal', {
+    type: 'doughnut',
+    data: {
+      labels: canal.map(r => r.Tipo),
+      datasets: [{ data: canal.map(r => r.Receita), backgroundColor: [COLORS.accent, COLORS.accent3], borderWidth: 2, borderColor: '#11141b' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw) + ' (' + (ctx.raw/total*100).toFixed(1) + '%)' } }
+      }
+    }
+  });
+
+  // Canal por ano (estimativa proporcional pelo total conhecido)
+  mkChart('chartCanalAno', {
+    type: 'bar',
+    data: {
+      labels: ['2020','2021','2022'],
+      datasets: [
+        { label: 'Físico', data: [1821680, 4993140, 5912207], backgroundColor: COLORS.accent, borderRadius: 4 },
+        { label: 'Online', data: [362080, 989720, 1147252], backgroundColor: COLORS.accent3, borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw) } } },
+      scales: {
+        x: { stacked: false, grid: { display: false } },
+        y: { grid: { color: '#1e2436' }, ticks: { callback: v => fmtBRL(v) } }
+      }
+    }
+  });
+
+  const lojas = DATA.topLojas;
+  mkChart('chartTopLojas', {
+    type: 'bar',
+    data: {
+      labels: lojas.map(r => r['Nome da Loja']),
+      datasets: [{ label: 'Receita', data: lojas.map(r => r.Receita), backgroundColor: lojas.map((_,i) => i < 3 ? COLORS.accent : 'rgba(240,180,41,0.4)'), borderRadius: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw) } } },
+      scales: {
+        x: { grid: { color: '#1e2436' }, ticks: { callback: v => fmtBRL(v) } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// --- GEOGRÁFICO ---
+function renderGeoGrafico() {
+  const conts = DATA.continentes;
+  mkChart('chartContinente', {
+    type: 'doughnut',
+    data: {
+      labels: conts.map(r => r.Continente),
+      datasets: [{ data: conts.map(r => r.Receita), backgroundColor: [COLORS.accent, COLORS.accent3, COLORS.accent4, COLORS.green], borderWidth: 2, borderColor: '#11141b' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw) } }
+      }
+    }
+  });
+
+  const paises = DATA.paises;
+  mkChart('chartPaises', {
+    type: 'bar',
+    data: {
+      labels: paises.map(r => r['País']),
+      datasets: [{ label: 'Receita', data: paises.map(r => r.Receita), backgroundColor: paises.map((_,i) => i === 0 ? COLORS.accent : 'rgba(240,180,41,0.4)'), borderRadius: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + fmtBRL(ctx.raw) } } },
+      scales: {
+        x: { grid: { color: '#1e2436' }, ticks: { callback: v => fmtBRL(v) } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+function renderProgressBars() {
+  const cont = document.getElementById('progContinentes');
+  if (!cont) return;
+  const total = DATA.continentes.reduce((a,r) => a+r.Receita, 0);
+  const colors = [COLORS.accent, COLORS.accent3, COLORS.accent4, COLORS.green];
+  cont.innerHTML = DATA.continentes.map((r, i) => {
+    const pct = (r.Receita/total*100).toFixed(1);
+    return `<div class="prog-row">
+      <span class="prog-label">${r.Continente}</span>
+      <div class="prog-bar-wrap"><div class="prog-bar-fill" style="width:${pct}%;--fill:${colors[i]}"></div></div>
+      <span class="prog-val" style="color:${colors[i]}">${pct}% · ${fmtBRL(r.Receita)}</span>
+    </div>`;
+  }).join('');
+}
+
+// --- DEVOLUÇÕES ---
+function renderDevolucoes() {
+  const motivos = DATA.devMotivo;
+  mkChart('chartDevMotivo', {
+    type: 'doughnut',
+    data: {
+      labels: motivos.map(r => r['Motivo Devolução']),
+      datasets: [{ data: motivos.map(r => r.Count), backgroundColor: ['#f87171', COLORS.accent, COLORS.accent3, COLORS.muted], borderWidth: 2, borderColor: '#11141b' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 12 } } },
+        tooltip: { callbacks: { label: ctx => ' ' + ctx.raw + ' ocorrências (' + (ctx.raw/motivos.reduce((a,r)=>a+r.Count,0)*100).toFixed(1) + '%)' } }
+      }
+    }
+  });
+
+  const devM = DATA.devMensal;
+  mkChart('chartDevMensal', {
+    type: 'line',
+    data: {
+      labels: devM.map(r => r.AnoMes),
+      datasets: [{ label: 'Qtd Devolvida', data: devM.map(r => r.Qtd), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.15)', fill: true, tension: 0.4, pointRadius: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 12, font: { size: 11 } } },
+        y: { grid: { color: '#1e2436' } }
+      }
+    }
+  });
+}
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', () => {
+  renderAllCharts();
+});
+</script>
+</body>
+</html>
