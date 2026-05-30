@@ -3,369 +3,1072 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Augusto · Portfólio de Dados</title>
+<title>Augusto Oliveira · Analista de Dados & BI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#080a0f;--surf:#0e1118;--surf2:#141820;--border:#1c2133;
-  --accent:#f0b429;--blue:#38bdf8;--purple:#a78bfa;--green:#34d399;
-  --text:#e4e9f4;--muted:#5a6282;
-  --fhead:"Syne",sans-serif;--fbody:"DM Sans",sans-serif;
+  --bg:#06080d;--surf:#0c0f18;--surf2:#111520;--surf3:#161b27;
+  --border:#1a2035;--border2:#222840;
+  --gold:#f0b429;--gold2:#ffd166;--blue:#38bdf8;--purple:#a78bfa;--green:#34d399;--red:#f87171;
+  --text:#dde4f5;--muted:#4a5478;--muted2:#6b789e;
+  --fhead:"Syne",sans-serif;--fbody:"DM Sans",sans-serif;--fmono:"Space Mono",monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--fbody);min-height:100vh;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  opacity:.35}
-.blob{position:fixed;pointer-events:none;z-index:0;border-radius:50%;filter:blur(120px);opacity:.06}
-.blob1{width:500px;height:500px;background:var(--accent);top:-100px;left:-100px}
-.blob2{width:400px;height:400px;background:var(--blue);bottom:100px;right:-100px}
-.hero{position:relative;z-index:1;padding:5rem 2rem 4rem;max-width:1100px;margin:0 auto;
-  display:flex;flex-direction:column;align-items:flex-start;gap:1.2rem}
-.hero-eyebrow{display:flex;align-items:center;gap:10px;font-family:var(--fhead);
-  font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
-.hero-eyebrow::before{content:"";width:28px;height:2px;background:var(--accent)}
-.hero-name{font-family:var(--fhead);font-weight:800;font-size:clamp(2.8rem,6vw,5rem);
-  line-height:.95;letter-spacing:-1px;color:var(--text)}
-.hero-name span{color:var(--accent)}
-.hero-desc{max-width:520px;color:#7a85a8;font-size:15px;line-height:1.7;font-weight:300}
-.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:.5rem}
-.htag{font-size:12px;padding:4px 14px;border-radius:20px;border:1px solid var(--border);
-  background:var(--surf);color:var(--muted);font-weight:500;transition:all .2s}
-.htag:hover{border-color:var(--accent);color:var(--accent)}
-.divider{position:relative;z-index:1;max-width:1100px;margin:0 auto;
-  padding:0 2rem 2.5rem;display:flex;align-items:center;gap:16px}
-.divider-label{font-family:var(--fhead);font-size:11px;font-weight:700;
-  letter-spacing:3px;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-.divider-line{flex:1;height:1px;background:var(--border)}
-.cards-wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;
-  padding:0 2rem 6rem;display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
-.pcard{background:var(--surf);border:1px solid var(--border);border-radius:16px;
-  overflow:hidden;display:flex;flex-direction:column;
-  transition:transform .25s,border-color .25s,box-shadow .25s}
-.pcard:hover{transform:translateY(-6px);border-color:var(--c,var(--accent));
-  box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px var(--c,var(--accent)) inset}
-.pcard-top{height:4px;background:var(--c,var(--accent))}
-.pcard-body{padding:1.8rem 1.8rem 1.4rem;flex:1;display:flex;flex-direction:column;gap:1rem}
-.pcard-num{font-family:var(--fhead);font-size:11px;font-weight:700;
-  letter-spacing:3px;color:var(--c,var(--accent));text-transform:uppercase}
-.pcard-icon{font-size:2.4rem;line-height:1}
-.pcard-title{font-family:var(--fhead);font-weight:800;font-size:19px;
-  line-height:1.2;letter-spacing:.2px}
-.pcard-sub{font-size:12px;font-weight:700;text-transform:uppercase;
-  letter-spacing:1px;color:var(--c,var(--accent));margin-top:-6px}
-.pcard-desc{color:#7a85a8;font-size:13px;line-height:1.7;font-weight:300;flex:1}
-.pcard-stats{display:flex;gap:1.2rem;flex-wrap:wrap;
-  padding:1rem 0;border-top:1px solid var(--border)}
-.pstat{display:flex;flex-direction:column;gap:2px}
-.pstat-v{font-family:var(--fhead);font-size:18px;font-weight:800;
-  color:var(--c,var(--accent));line-height:1}
-.pstat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
-.pcard-tags{display:flex;flex-wrap:wrap;gap:6px}
-.ptag{font-size:11px;padding:3px 10px;border-radius:20px;
-  background:rgba(255,255,255,.04);border:1px solid var(--border);
-  color:var(--muted);transition:all .2s}
-.pcard:hover .ptag{border-color:rgba(255,255,255,.1)}
-.pcard-foot{padding:0 1.8rem 1.8rem}
-.pcard-btn{display:flex;align-items:center;justify-content:center;gap:8px;
-  text-decoration:none;padding:12px 0;border-radius:10px;
-  background:var(--c,var(--accent));color:#000;
-  font-family:var(--fhead);font-weight:700;font-size:13px;letter-spacing:.5px;
+
+/* ── ANIMATED GRID BG ── */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(240,180,41,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(240,180,41,.025) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 0%,#000 40%,transparent 100%);
+}
+
+/* ── BLOBS ── */
+.blob{position:fixed;pointer-events:none;z-index:0;border-radius:50%;filter:blur(100px);opacity:.07;animation:blobdrift 20s ease-in-out infinite alternate}
+.blob1{width:600px;height:600px;background:var(--gold);top:-150px;left:-150px;animation-delay:0s}
+.blob2{width:500px;height:500px;background:var(--blue);bottom:0;right:-100px;animation-delay:-8s}
+.blob3{width:350px;height:350px;background:var(--purple);top:40%;left:50%;animation-delay:-14s}
+@keyframes blobdrift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,60px) scale(1.1)}}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 2.5rem;backdrop-filter:blur(20px);
+  background:rgba(6,8,13,.6);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fmono);font-size:13px;color:var(--gold);font-weight:700;letter-spacing:1px}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-ham{display:none}
+
+/* ── HERO ── */
+.hero{position:relative;z-index:1;padding:9rem 2.5rem 5rem;max-width:1200px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--fmono);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold);border:1px solid rgba(240,180,41,.3);background:rgba(240,180,41,.06);
+  padding:5px 14px;border-radius:4px;margin-bottom:1.5rem}
+.hero-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+.hero-name{font-family:var(--fhead);font-weight:800;
+  font-size:clamp(3.5rem,8vw,7rem);line-height:.88;letter-spacing:-3px;margin-bottom:1.5rem}
+.hero-name .line2{color:var(--gold);display:block}
+.hero-name .line3{font-size:clamp(1.2rem,2.5vw,2rem);letter-spacing:0;font-weight:400;
+  color:var(--muted2);font-family:var(--fbody);display:block;margin-top:.8rem}
+
+.hero-cols{display:grid;grid-template-columns:1fr 420px;gap:3rem;align-items:start;margin-top:3rem}
+.hero-desc{font-size:16px;line-height:1.8;color:#6b789e;font-weight:300;max-width:500px}
+.hero-cta{display:flex;gap:12px;margin-top:2rem;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;
+  background:var(--gold);color:#000;font-family:var(--fhead);font-weight:700;font-size:13px;
+  letter-spacing:.5px;padding:13px 24px;border-radius:8px;text-decoration:none;
   transition:filter .2s,transform .15s}
-.pcard-btn.wt{color:#fff}
-.pcard-btn:hover{filter:brightness(1.18);transform:translateY(-1px)}
-.about-strip{position:relative;z-index:1;background:var(--surf);
-  border-top:1px solid var(--border);padding:3rem 2rem}
-.about-inner{max-width:1100px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
-.about-left{display:flex;flex-direction:column;gap:.6rem;max-width:640px}
-.about-name{font-family:var(--fhead);font-size:22px;font-weight:800;letter-spacing:.3px}
-.about-text{color:#7a85a8;font-size:14px;line-height:1.65;font-weight:300}
-.about-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:.4rem}
-.atool{font-size:12px;padding:4px 14px;border-radius:6px;
-  background:var(--surf2);border:1px solid var(--border);color:var(--muted);font-weight:500}
-footer{position:relative;z-index:1;text-align:center;padding:1.5rem;
-  color:var(--muted);font-size:12px;border-top:1px solid var(--border)}
-/* ── CV SECTION ── */
-.cv-section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 2rem 5rem}
-.cv-grid{display:grid;grid-template-columns:1fr 340px;gap:3rem;align-items:start}
-/* Timeline */
-.cv-timeline{display:flex;flex-direction:column;gap:0}
-.cv-job{display:flex;gap:1.4rem;padding-bottom:2.4rem;position:relative}
-.cv-job:not(:last-child)::before{content:"";position:absolute;left:7px;top:20px;bottom:0;
-  width:1px;background:var(--border)}
-.cv-dot{width:15px;height:15px;border-radius:50%;background:var(--accent);
-  border:3px solid var(--bg);flex-shrink:0;margin-top:4px;z-index:1;
-  box-shadow:0 0 10px rgba(240,180,41,.4)}
-.cv-dot.blue{background:var(--blue);box-shadow:0 0 10px rgba(56,189,248,.4)}
-.cv-dot.purple{background:var(--purple);box-shadow:0 0 10px rgba(167,139,250,.4)}
-.cv-job-content{flex:1}
-.cv-job-header{display:flex;align-items:flex-start;justify-content:space-between;
-  gap:1rem;flex-wrap:wrap;margin-bottom:.5rem}
-.cv-job-title{font-family:var(--fhead);font-weight:800;font-size:16px;line-height:1.2}
-.cv-job-period{font-size:11px;font-weight:700;letter-spacing:1px;
-  color:var(--accent);background:rgba(240,180,41,.1);
-  border:1px solid rgba(240,180,41,.25);padding:3px 10px;border-radius:20px;
+.btn-primary:hover{filter:brightness(1.12);transform:translateY(-2px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--text);font-family:var(--fhead);font-weight:700;font-size:13px;
+  letter-spacing:.5px;padding:13px 24px;border-radius:8px;text-decoration:none;
+  border:1px solid var(--border2);transition:border-color .2s,color .2s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── IMPACT STRIP ── */
+.impact-strip{position:relative;z-index:1;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,var(--surf) 0%,transparent 100%)}
+.impact-inner{max-width:1200px;margin:0 auto;padding:2.5rem 2.5rem;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+.impact-item{padding:1.5rem 1rem;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center}
+.impact-item:last-child{border-right:none}
+.impact-num{font-family:var(--fhead);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:800;
+  color:var(--gold);line-height:1}
+.impact-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);line-height:1.4;max-width:100px}
+
+/* ── SECTION HEADERS ── */
+.section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:5rem 2.5rem}
+.section-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:3rem}
+.section-num{font-family:var(--fmono);font-size:11px;color:var(--gold);
+  font-weight:700;letter-spacing:2px}
+.section-title{font-family:var(--fhead);font-weight:800;font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.5px}
+.section-line{flex:1;height:1px;background:var(--border)}
+
+/* ── BI SHOWCASE ── */
+.bi-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.bi-card{background:var(--surf);border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .3s,border-color .3s,box-shadow .3s;position:relative}
+.bi-card::before{content:"";position:absolute;inset:0;border-radius:16px;
+  background:radial-gradient(circle at top left,rgba(240,180,41,.06),transparent 60%);
+  pointer-events:none;opacity:0;transition:opacity .3s}
+.bi-card:hover{transform:translateY(-8px);border-color:var(--c,var(--gold));
+  box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.bi-card:hover::before{opacity:1}
+.bi-card.featured{grid-column:span 2;display:flex;flex-direction:column}
+.bi-accent{height:3px;background:var(--c,var(--gold))}
+.bi-preview{background:var(--surf2);position:relative;overflow:hidden;
+  min-height:180px;display:flex;align-items:center;justify-content:center}
+.bi-card.featured .bi-preview{min-height:100%}
+.bi-preview-chart{width:100%;height:100%;padding:1.5rem;display:flex;flex-direction:column;gap:.8rem}
+.bi-bar-row{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted2)}
+.bi-bar-label{min-width:70px;text-align:right;font-family:var(--fmono)}
+.bi-bar-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.bi-bar-fill{height:100%;border-radius:3px;background:var(--c,var(--gold));transition:width .8s ease}
+.bi-bar-val{min-width:35px;font-family:var(--fmono);font-size:10px}
+.bi-body{padding:1.8rem;display:flex;flex-direction:column;gap:.8rem;flex:1}
+.bi-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--c,var(--gold))}
+.bi-title{font-family:var(--fhead);font-weight:800;font-size:18px;line-height:1.2}
+.bi-desc{color:var(--muted2);font-size:13px;line-height:1.7;font-weight:300;flex:1}
+.bi-metrics{display:flex;gap:1.5rem;padding:.8rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.bi-metric{display:flex;flex-direction:column;gap:2px}
+.bi-metric-v{font-family:var(--fhead);font-size:20px;font-weight:800;color:var(--c,var(--gold));line-height:1}
+.bi-metric-l{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.bi-stack{display:flex;flex-wrap:wrap;gap:5px}
+.bi-pill{font-size:10px;padding:3px 9px;border-radius:20px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--muted2)}
+.bi-btn{display:flex;align-items:center;justify-content:center;gap:8px;
+  text-decoration:none;padding:11px;border-radius:8px;
+  background:var(--c,var(--gold));color:#000;
+  font-family:var(--fhead);font-weight:700;font-size:12px;letter-spacing:.5px;
+  margin-top:.8rem;transition:filter .2s,transform .15s}
+.bi-btn.wt{color:#fff}
+.bi-btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+
+/* ── COMPANIES WALL ── */
+.companies-wall{position:relative;z-index:1;
+  border-top:1px solid var(--border);padding:4rem 2.5rem}
+.companies-inner{max-width:1200px;margin:0 auto}
+.companies-label{font-family:var(--fmono);font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);text-align:center;margin-bottom:2.5rem}
+.companies-grid{display:flex;align-items:center;justify-content:center;gap:2px;flex-wrap:wrap}
+.company-chip{display:flex;align-items:center;gap:10px;
+  padding:12px 24px;border-radius:10px;
+  background:var(--surf);border:1px solid var(--border);
+  transition:border-color .25s,transform .2s;cursor:default;position:relative}
+.company-chip:hover{border-color:var(--chip-c,var(--gold));transform:translateY(-3px)}
+.chip-dot{width:8px;height:8px;border-radius:50%;background:var(--chip-c,var(--gold));flex-shrink:0}
+.chip-name{font-family:var(--fhead);font-weight:700;font-size:14px;letter-spacing:.3px}
+.chip-role{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);margin-left:4px}
+.chip-period{font-family:var(--fmono);font-size:10px;color:var(--muted);margin-left:auto;padding-left:12px}
+
+/* ── EXPERIENCE TIMELINE ── */
+.timeline{display:flex;flex-direction:column;gap:0;position:relative}
+.timeline::before{content:"";position:absolute;left:11px;top:10px;bottom:10px;
+  width:1px;background:linear-gradient(var(--gold),var(--blue),var(--purple),var(--border))}
+.tl-item{display:flex;gap:2rem;padding-bottom:2.5rem;align-items:flex-start}
+.tl-dot{width:23px;height:23px;border-radius:50%;background:var(--dot-c,var(--gold));
+  border:3px solid var(--bg);flex-shrink:0;
+  box-shadow:0 0 16px var(--dot-c,var(--gold));z-index:1;
+  display:flex;align-items:center;justify-content:center}
+.tl-dot::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--bg)}
+.tl-card{flex:1;background:var(--surf);border:1px solid var(--border);
+  border-radius:14px;padding:1.5rem;
+  transition:border-color .25s}
+.tl-card:hover{border-color:var(--dot-c,var(--gold))}
+.tl-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.3rem;flex-wrap:wrap}
+.tl-title{font-family:var(--fhead);font-weight:800;font-size:17px}
+.tl-badge{font-family:var(--fmono);font-size:10px;font-weight:700;letter-spacing:1px;
+  padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.05);
+  border:1px solid var(--dot-c,rgba(240,180,41,.3));color:var(--dot-c,var(--gold));
   white-space:nowrap;flex-shrink:0}
-.cv-job-period.blue{color:var(--blue);background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.25)}
-.cv-job-period.purple{color:var(--purple);background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.25)}
-.cv-job-company{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:.8rem}
-.cv-job-items{display:flex;flex-direction:column;gap:5px}
-.cv-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;
-  color:#7a85a8;line-height:1.55;font-weight:300}
-.cv-item::before{content:"→";color:var(--accent);font-size:11px;
-  flex-shrink:0;margin-top:2px;font-weight:700}
-/* Sidebar */
-.cv-sidebar{display:flex;flex-direction:column;gap:1.5rem}
-.cv-box{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
-.cv-box-title{font-family:var(--fhead);font-size:11px;font-weight:700;
-  letter-spacing:3px;text-transform:uppercase;color:var(--muted);
-  margin-bottom:1.1rem;display:flex;align-items:center;gap:8px}
-.cv-box-title::after{content:"";flex:1;height:1px;background:var(--border)}
+.tl-company{font-size:13px;font-weight:600;color:var(--muted2);margin-bottom:1rem}
+.tl-items{display:flex;flex-direction:column;gap:5px}
+.tl-point{display:flex;gap:8px;font-size:13px;color:#5d6a8e;line-height:1.6;font-weight:300}
+.tl-point::before{content:"›";color:var(--dot-c,var(--gold));font-weight:700;flex-shrink:0;font-size:14px}
+.tl-promo{display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--green);border:1px solid rgba(52,211,153,.25);
+  background:rgba(52,211,153,.07);padding:3px 8px;border-radius:4px;margin-top:.5rem}
+
+/* ── SKILLS BOX ── */
+.skills-box{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin-bottom:1.5rem}
+.box-title{font-family:var(--fhead);font-size:11px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:1.1rem;
+  display:flex;align-items:center;gap:8px}
+.box-title::after{content:"";flex:1;height:1px;background:var(--border)}
 .skill-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.skill-name{font-size:13px;min-width:120px;color:var(--text)}
-.skill-bar{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
-.skill-fill{height:100%;border-radius:3px;background:var(--accent)}
-.skill-pct{font-size:11px;color:var(--muted);min-width:28px;text-align:right}
-.contact-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;
-  font-size:13px;color:#7a85a8;font-weight:300}
+.skill-name{font-size:13px;min-width:130px;color:var(--text)}
+.skill-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.skill-fill{height:100%;border-radius:2px;background:var(--sc,var(--gold))}
+.skill-pct{font-family:var(--fmono);font-size:10px;color:var(--muted);min-width:30px;text-align:right}
+
+/* ── CONTACT & EDU ── */
+.contact-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px;color:#5d6a8e;font-weight:300}
 .contact-row a{color:var(--blue);text-decoration:none}
 .contact-row a:hover{text-decoration:underline}
-.contact-icon{font-size:14px;flex-shrink:0;width:18px;text-align:center}
-.edu-item{font-size:13px;color:#7a85a8;line-height:1.6;font-weight:300}
+.ci{font-size:13px;color:var(--muted2);min-width:18px}
 .edu-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
-.edu-period{font-size:11px;color:var(--muted);margin-top:2px}
+.edu-item{font-size:13px;color:#5d6a8e;line-height:1.6;font-weight:300}
+.edu-period{font-family:var(--fmono);font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── CV GRID ── */
+.cv-grid{display:grid;grid-template-columns:1fr 320px;gap:3rem;align-items:start}
+
+/* ── ABOUT STRIP ── */
+.about-strip{position:relative;z-index:1;background:var(--surf);
+  border-top:1px solid var(--border);padding:3rem 2.5rem}
+.about-inner{max-width:1200px;margin:0 auto;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.about-left{display:flex;flex-direction:column;gap:.6rem;max-width:640px}
+.about-name{font-family:var(--fhead);font-size:20px;font-weight:800;letter-spacing:.3px}
+.about-text{color:#5d6a8e;font-size:14px;line-height:1.7;font-weight:300}
+.about-tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:.6rem}
+.atool{font-size:11px;padding:4px 12px;border-radius:6px;
+  background:var(--surf2);border:1px solid var(--border);color:var(--muted2);font-weight:500}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;text-align:center;padding:1.5rem;
+  color:var(--muted);font-size:12px;border-top:1px solid var(--border);font-family:var(--fmono)}
+
+/* ── SKILLS GRID ── */
+.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
+.sk-card{background:var(--surf);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  transition:transform .25s,border-color .25s}
+.sk-card:hover{transform:translateY(-5px);border-color:var(--sk,var(--gold))}
+.sk-top{height:3px;background:var(--sk,var(--gold))}
+.sk-icon{font-size:1.8rem;padding:1.2rem 1.2rem .4rem}
+.sk-cat{font-family:var(--fhead);font-weight:800;font-size:14px;letter-spacing:.3px;
+  padding:0 1.2rem .8rem;color:var(--sk,var(--gold))}
+.sk-items{display:flex;flex-direction:column;gap:8px;padding:0 1.2rem 1.4rem}
+.sk-item{display:flex;flex-direction:column;gap:3px}
+.sk-name{font-size:11px;color:var(--text);font-weight:500}
+.sk-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.sk-fill{height:100%;border-radius:2px;background:var(--sk,var(--gold))}
+.sk-lvl{font-family:var(--fmono);font-size:9px;letter-spacing:.5px}
+@media(max-width:900px){.skills-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.skills-grid{grid-template-columns:1fr}}
+
+/* ── SCROLL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ══════════════════════════════════════
+   TABLET  (≤ 900px)
+══════════════════════════════════════ */
 @media(max-width:900px){
+  .bi-card.featured{grid-column:span 1!important;display:flex;flex-direction:column}
+  .bi-grid{grid-template-columns:1fr}
   .cv-grid{grid-template-columns:1fr}
-  .cv-sidebar{order:-1}
+  .hero-cols{grid-template-columns:1fr}
+  /* BI preview: quebra as colunas internas */
+  .bi-preview-split{grid-template-columns:1fr!important}
+  .bi-preview-split>div:first-child{border-right:none!important;border-bottom:1px solid var(--border)}
+  /* Skills */
+  .skills-grid{grid-template-columns:1fr 1fr}
+  /* companies */
+  .companies-grid{justify-content:flex-start}
 }
-@media(max-width:700px){
-  .hero{padding:3rem 1.2rem 2.5rem}
-  .cards-wrap{padding:0 1.2rem 4rem}
-  .divider{padding:0 1.2rem 2rem}
-  .cv-section{padding:0 1.2rem 4rem}
+
+/* ══════════════════════════════════════
+   MOBILE  (≤ 640px)
+══════════════════════════════════════ */
+@media(max-width:640px){
+  /* ── Nav hambúrguer ── */
+  .nav-ham{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:4px;
+    background:none;border:none;outline:none}
+  .nav-ham span{width:22px;height:2px;background:var(--text);border-radius:2px;
+    transition:transform .25s,opacity .25s;display:block}
+  .nav-ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav-ham.open span:nth-child(2){opacity:0}
+  .nav-ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav-links{display:none;position:fixed;top:52px;left:0;right:0;
+    background:rgba(6,8,13,.97);border-bottom:1px solid var(--border);
+    flex-direction:column;padding:1.2rem 1.5rem;gap:0;z-index:99}
+  .nav-links.open{display:flex}
+  .nav-links a{font-size:14px;letter-spacing:1px;padding:.8rem 0;
+    border-bottom:1px solid var(--border);color:var(--text)}
+  .nav-links a:last-child{border-bottom:none}
+  nav{padding:.75rem 1.2rem}
+
+  /* ── Hero ── */
+  .hero{padding:5.5rem 1.2rem 2.5rem}
+  .hero-name{font-size:clamp(2.4rem,10vw,3.5rem);letter-spacing:-2px}
+  .hero-cols{grid-template-columns:1fr;gap:1.5rem}
+  .hero-desc{font-size:14px}
+  .btn-primary,.btn-ghost{padding:11px 18px;font-size:12px}
+
+  /* ── Sections ── */
+  .section{padding:2.5rem 1.2rem}
+  .section-title{font-size:1.3rem}
+
+  /* ── BI cards ── */
+  .bi-grid{grid-template-columns:1fr;gap:1rem}
+  .bi-card.featured,[class*="bi-card"]{grid-column:span 1!important}
+  /* colunas internas dos previews → empilhar */
+  .bi-preview-split{display:flex!important;flex-direction:column!important}
+  .bi-preview-split>div:first-child{border-right:none!important;border-bottom:1px solid var(--border)!important}
+  .bi-body{padding:1.2rem}
+  .bi-metrics{flex-wrap:wrap;gap:.8rem}
+  .bi-metric-v{font-size:16px}
+  .bi-btn{padding:10px}
+
+  /* ── Skills cards ── */
+  .skills-grid{grid-template-columns:1fr;gap:.8rem}
+  .sk-card{border-radius:10px}
+
+  /* ── Companies ── */
+  .companies-wall{padding:2rem 1.2rem}
+  .companies-grid{gap:6px}
+  .company-chip{padding:8px 14px;border-radius:8px}
+  .chip-name{font-size:13px}
+  .chip-role{display:none}
+
+  /* ── Timeline ── */
+  .tl-item{gap:1rem}
+  .tl-card{padding:1.1rem}
+  .tl-header{flex-direction:column;gap:.4rem}
+  .tl-badge{align-self:flex-start}
+
+  /* ── CV sidebar ── */
+  .cv-grid{grid-template-columns:1fr;gap:1.5rem}
+
+  /* ── About strip ── */
+  .about-strip{padding:2rem 1.2rem}
+  .about-tools{gap:5px}
+  .atool{font-size:10px;padding:3px 8px}
+
+  /* ── Footer ── */
+  footer{font-size:11px;padding:1rem}
 }
 </style>
 </head>
 <body>
 <div class="blob blob1"></div>
 <div class="blob blob2"></div>
+<div class="blob blob3"></div>
 
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">AO_portfolio.bi</div>
+  <div class="nav-links" id="nav-links">
+    <a href="#bi" onclick="closeNav()">BI</a>
+    <a href="#habilidades" onclick="closeNav()">Skills</a>
+    <a href="#experiencia" onclick="closeNav()">Experiência</a>
+    <a href="#contato" onclick="closeNav()">Contato</a>
+  </div>
+  <button class="nav-ham" id="nav-ham" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">Portf&oacute;lio &middot; An&aacute;lise de Dados</div>
-  <h1 class="hero-name">Augusto<br><span>Oliveira</span></h1>
-  <p class="hero-desc">Analista de Dados especializado em BI operacional e comercial. Construo dashboards HTML autossuficientes &mdash; sem depend&ecirc;ncia de servidores, licen&ccedil;as ou ferramentas externas de BI.</p>
-  <div class="hero-tags">
-    <span class="htag">Python</span><span class="htag">Pandas</span>
-    <span class="htag">Excel</span><span class="htag">Chart.js</span>
-    <span class="htag">SQL</span><span class="htag">BI Operacional</span>
-    <span class="htag">An&aacute;lise Comercial</span>
+  <div class="hero-badge">● Disponível para projetos</div>
+  <h1 class="hero-name">
+    Augusto<br>
+    <span class="line2">Oliveira</span>
+    <span class="line3">Analista de Dados &amp; Business Intelligence</span>
+  </h1>
+  <div class="hero-cols">
+    <div>
+      <p class="hero-desc">
+        Especialista em BI operacional e comercial com histórico em empresas como Unidas, Britânia e Nova Gestões.
+        Construo dashboards HTML autossuficientes — sem dependência de servidores, licenças ou ferramentas externas.
+        Dados que contam histórias e movem decisões.
+      </p>
+      <div class="hero-cta">
+        <a class="btn-primary" href="#bi">Ver dashboards ↓</a>
+        <a class="btn-ghost" href="https://www.linkedin.com/in/augusto-bueno-de-oliveira-bb2987328" target="_blank">LinkedIn ↗</a>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:1.2rem;font-family:var(--fmono);font-size:12px;line-height:1.9;color:var(--muted2)">
+        <span style="color:var(--muted)">// stack principal</span><br>
+        <span style="color:var(--gold)">power_bi</span> <span style="color:var(--text)">= ["DAX", "Power Query", "DirectQuery"]</span><br>
+        <span style="color:var(--green)">python</span> <span style="color:var(--text)">= ["Pandas", "ETL", "Automação", "IA"]</span><br>
+        <span style="color:var(--blue)">integração</span> <span style="color:var(--text)">= ["APIs REST", "OAuth 2.0", "SharePoint"]</span><br>
+        <span style="color:var(--purple)">dados</span> <span style="color:var(--text)">= ["CSV", "Excel", "PDF", "SQL"]</span><br>
+        <span style="color:var(--gold)">excel</span> <span style="color:var(--text)">= "avançado"</span><br>
+        <span style="color:var(--muted)">// cargo atual</span><br>
+        <span style="color:var(--green)">empresa</span> <span style="color:var(--text)">= "Unidas 🚗"</span>
+      </div>
+    </div>
   </div>
 </section>
 
-<div class="divider">
-  <span class="divider-label">Projetos</span>
-  <div class="divider-line"></div>
-</div>
 
-<div class="cards-wrap">
 
-  <!-- Card 1: Vendas -->
-  <div class="pcard" style="--c:var(--accent)">
-    <div class="pcard-top"></div>
-    <div class="pcard-body">
-      <div class="pcard-num">01 &middot; An&aacute;lise Comercial</div>
-      <div class="pcard-icon">&#x1F4CA;</div>
-      <div class="pcard-title">An&aacute;lise de Vendas Hive Participa&ccedil;&otilde;es</div>
-      <div class="pcard-sub">2020 &ndash; 2022</div>
-      <p class="pcard-desc">Dashboard completo de performance comercial com an&aacute;lise de receita, lucro e margem bruta. Inclui ranking de produtos e marcas, distribui&ccedil;&atilde;o geogr&aacute;fica global, evolu&ccedil;&atilde;o por canal f&iacute;sico vs online e an&aacute;lise de devolu&ccedil;&otilde;es com breakdowns por motivo.</p>
-      <div class="pcard-stats">
-        <div class="pstat"><span class="pstat-v">R$&thinsp;15M</span><span class="pstat-l">Receita total</span></div>
-        <div class="pstat"><span class="pstat-v">74,6%</span><span class="pstat-l">Margem bruta</span></div>
-        <div class="pstat"><span class="pstat-v">25K</span><span class="pstat-l">Pedidos</span></div>
-        <div class="pstat"><span class="pstat-v">+223%</span><span class="pstat-l">Crescimento</span></div>
-      </div>
-      <div class="pcard-tags">
-        <span class="ptag">Python</span><span class="ptag">Pandas</span>
-        <span class="ptag">Chart.js</span><span class="ptag">KPI</span>
-        <span class="ptag">Vendas</span><span class="ptag">Geogr&aacute;fico</span>
-      </div>
-    </div>
-    <div class="pcard-foot">
-      <a class="pcard-btn" href="Vendas.html" target="_blank">&#x1F517; Abrir Dashboard</a>
-    </div>
+<!-- BI SECTION -->
+<section class="section" id="bi">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Business Intelligence</h2>
+    <div class="section-line"></div>
   </div>
 
-  <!-- Card 2: Visitas -->
-  <div class="pcard" style="--c:var(--blue)">
-    <div class="pcard-top"></div>
-    <div class="pcard-body">
-      <div class="pcard-num">02 &middot; BI Operacional</div>
-      <div class="pcard-icon">&#x1F5FA;&#xFE0F;</div>
-      <div class="pcard-title">Cad&ecirc;ncia de Visitas por Analista</div>
-      <div class="pcard-sub">Oficinas RAC &middot; Semana Atual</div>
-      <p class="pcard-desc">Monitoramento em tempo real da cad&ecirc;ncia semanal de visitas presenciais a oficinas. Sem&aacute;foro de meta por analista, heatmap hist&oacute;rico semanal, calend&aacute;rio mensal com efetividade por visita e calend&aacute;rio consolidado de toda a equipe.</p>
-      <div class="pcard-stats">
-        <div class="pstat"><span class="pstat-v">12</span><span class="pstat-l">Analistas</span></div>
-        <div class="pstat"><span class="pstat-v">20</span><span class="pstat-l">Meta/semana</span></div>
-        <div class="pstat"><span class="pstat-v">3</span><span class="pstat-l">Coordena&ccedil;&otilde;es</span></div>
+  <div class="bi-grid">
+
+    <!-- ══ CARD 1: VISITAS — destaque full-width ══ -->
+    <div class="bi-card featured reveal" style="--c:var(--blue);grid-column:span 2">
+      <div class="bi-accent" style="background:var(--blue)"></div>
+      <div class="bi-preview-split" style="display:grid;grid-template-columns:1fr 1fr">
+
+        <!-- Preview lado esquerdo: ranking de efetividade real -->
+        <div style="background:var(--surf2);padding:1.6rem;display:flex;flex-direction:column;gap:.9rem;border-right:1px solid var(--border)">
+          <div style="font-family:var(--fmono);font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">efetividade · semana atual</div>
+
+          <!-- KPI strip -->
+          <div style="display:flex;gap:1.2rem">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-family:var(--fhead);font-size:22px;font-weight:800;color:var(--blue);line-height:1">60.5%</span>
+              <span style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">média equipe</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-family:var(--fhead);font-size:22px;font-weight:800;color:var(--green);line-height:1">12</span>
+              <span style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">analistas</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-family:var(--fhead);font-size:22px;font-weight:800;color:var(--gold);line-height:1">20</span>
+              <span style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">meta/semana</span>
+            </div>
+          </div>
+
+          <!-- ranking analistas com dados reais -->
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:72px">Analista 07</span>
+              <div style="flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden"><div style="width:95%;height:100%;background:var(--green);border-radius:3px"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--green);min-width:38px;text-align:right">95.0% ✓</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:72px">Analista 06</span>
+              <div style="flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden"><div style="width:70%;height:100%;background:var(--green);border-radius:3px"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--green);min-width:38px;text-align:right">70.0% ✓</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:72px">Analista 12</span>
+              <div style="flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden"><div style="width:66%;height:100%;background:var(--blue);border-radius:3px"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--blue);min-width:38px;text-align:right">66.1% →</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:72px">Analista 04</span>
+              <div style="flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden"><div style="width:59%;height:100%;background:var(--blue);border-radius:3px"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--blue);min-width:38px;text-align:right">59.6% →</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:72px">Analista 05</span>
+              <div style="flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden"><div style="width:56%;height:100%;background:var(--gold);border-radius:3px"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--gold);min-width:38px;text-align:right">56.4% ⚠</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:72px">Analista 09</span>
+              <div style="flex:1;height:7px;background:var(--border);border-radius:3px;overflow:hidden"><div style="width:47%;height:100%;background:var(--red);border-radius:3px"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--red);min-width:38px;text-align:right">47.4% ✗</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview lado direito: heatmap de dias + legenda de tipos de visita -->
+        <div style="background:var(--surf2);padding:1.6rem;display:flex;flex-direction:column;gap:.9rem">
+          <div style="font-family:var(--fmono);font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">heatmap histórico · visitas por dia</div>
+
+          <!-- heatmap canvas -->
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="font-size:9px;font-family:var(--fmono);color:var(--muted)">Seg</span>
+              <span style="font-size:9px;font-family:var(--fmono);color:var(--muted)">Ter</span>
+              <span style="font-size:9px;font-family:var(--fmono);color:var(--muted)">Qua</span>
+              <span style="font-size:9px;font-family:var(--fmono);color:var(--muted)">Qui</span>
+              <span style="font-size:9px;font-family:var(--fmono);color:var(--muted)">Sex</span>
+              <span style="font-size:9px;font-family:var(--fmono);color:var(--muted)">Sáb</span>
+              <span style="font-size:9px;font-family:var(--fmono);color:var(--muted)">Dom</span>
+            </div>
+            <div id="heatmap-v" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div>
+          </div>
+          <script>
+          document.addEventListener('DOMContentLoaded',()=>{
+            const g=document.getElementById('heatmap-v');
+            if(!g)return;
+            // dados reais baseados nos registros: mais visitas Seg-Qui, menos Sáb-Dom
+            [4,5,3,5,4,1,0,3,4,4,5,3,1,0,4,5,4,4,4,0,0,4,4,3,5,3,1,0,3,4,4,4,4,0,0,5,5,4,5,4,1,0].forEach(v=>{
+              const d=document.createElement('div');
+              const alpha=v===0?0.05:v/5*0.7+0.1;
+              d.style.cssText=`height:11px;border-radius:2px;background:rgba(56,189,248,${alpha.toFixed(2)})`;
+              g.appendChild(d);
+            });
+          });
+          </script>
+
+          <!-- legenda: tipos de visita extraídos do BI real -->
+          <div style="font-family:var(--fmono);font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:.2rem">tipos de efetividade</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;align-items:center;gap:7px">
+              <div style="width:8px;height:8px;border-radius:2px;background:var(--green);flex-shrink:0"></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2)">Efetiva, Saiu do Tubo</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px">
+              <div style="width:8px;height:8px;border-radius:2px;background:var(--blue);flex-shrink:0"></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2)">Efetiva, Mudou de etapa</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px">
+              <div style="width:8px;height:8px;border-radius:2px;background:var(--gold);flex-shrink:0"></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2)">Mudou etapa, fora do prazo</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px">
+              <div style="width:8px;height:8px;border-radius:2px;background:var(--red);flex-shrink:0"></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2)">Sem efetividade, Saiu do Tubo</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="pcard-tags">
-        <span class="ptag">Python</span><span class="ptag">Pandas</span>
-        <span class="ptag">Excel</span><span class="ptag">KPI</span>
-        <span class="ptag">Opera&ccedil;&otilde;es</span><span class="ptag">Heatmap</span>
+
+      <div class="bi-body">
+        <span class="bi-tag" style="color:var(--blue)">02 · BI Operacional · Unidas</span>
+        <div class="bi-title">Cadência de Visitas por Analista</div>
+        <p class="bi-desc">Dashboard de monitoramento semanal de visitas presenciais a oficinas RAC. Ranking de efetividade por analista com semáforo de meta, heatmap histórico, calendário mensal detalhado por visita e painel consolidado das 3 coordenações.</p>
+        <div class="bi-metrics">
+          <div class="bi-metric"><span class="bi-metric-v" style="color:var(--blue)">12</span><span class="bi-metric-l">Analistas</span></div>
+          <div class="bi-metric"><span class="bi-metric-v" style="color:var(--blue)">60.5%</span><span class="bi-metric-l">Efetividade</span></div>
+          <div class="bi-metric"><span class="bi-metric-v" style="color:var(--blue)">20</span><span class="bi-metric-l">Meta/semana</span></div>
+          <div class="bi-metric"><span class="bi-metric-v" style="color:var(--blue)">3</span><span class="bi-metric-l">Coord.</span></div>
+        </div>
+        <div class="bi-stack">
+          <span class="bi-pill">Python</span><span class="bi-pill">Pandas</span><span class="bi-pill">Excel</span>
+          <span class="bi-pill">Heatmap</span><span class="bi-pill">Semáforo</span><span class="bi-pill">KPI</span>
+        </div>
+        <a class="bi-btn wt" href="BI_Visitas.html" target="_blank" style="background:var(--blue)">🔗 Abrir Dashboard</a>
       </div>
     </div>
-    <div class="pcard-foot">
-      <a class="pcard-btn wt" href="BI_Visitas.html" target="_blank" style="background:var(--blue)">&#x1F517; Abrir Dashboard</a>
+
+    <!-- ══ CARD 2: IMPRODUTIVO — destaque full-width ══ -->
+    <div class="bi-card featured reveal" style="--c:var(--purple);grid-column:span 2">
+      <div class="bi-accent" style="background:var(--purple)"></div>
+      <div class="bi-preview-split" style="display:grid;grid-template-columns:1fr 1fr">
+
+        <!-- Preview lado esquerdo: funil real com dados do BI -->
+        <div style="background:var(--surf2);padding:1.6rem;display:flex;flex-direction:column;gap:.9rem;border-right:1px solid var(--border)">
+          <div style="font-family:var(--fmono);font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">funil de atendimento · em aberto</div>
+
+          <!-- KPI strip -->
+          <div style="display:flex;gap:1.2rem">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-family:var(--fhead);font-size:22px;font-weight:800;color:var(--purple);line-height:1">2.910</span>
+              <span style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">total aberto</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-family:var(--fhead);font-size:22px;font-weight:800;color:var(--red);line-height:1">26.7%</span>
+              <span style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">venc. SLA</span>
+            </div>
+          </div>
+
+          <!-- funil com dados reais do BI -->
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:96px">Diagnóstico</span>
+              <div style="flex:1;height:18px;background:rgba(167,139,250,.32);border-radius:3px;display:flex;align-items:center;justify-content:space-between;padding:0 7px">
+                <span style="font-family:var(--fmono);font-size:9px;color:#c4b5fd">1.124</span>
+                <span style="font-family:var(--fmono);font-size:9px;color:#a78bfa">38.6%</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:96px">Aguard. peça</span>
+              <div style="flex:1;height:18px;background:rgba(167,139,250,.24);border-radius:3px;display:flex;align-items:center;justify-content:space-between;padding:0 7px;margin-right:10px">
+                <span style="font-family:var(--fmono);font-size:9px;color:#c4b5fd">878</span>
+                <span style="font-family:var(--fmono);font-size:9px;color:#a78bfa">30.2%</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:96px">Aguard. mão de obra</span>
+              <div style="flex:1;height:18px;background:rgba(167,139,250,.16);border-radius:3px;display:flex;align-items:center;justify-content:space-between;padding:0 7px;margin-right:22px">
+                <span style="font-family:var(--fmono);font-size:9px;color:#c4b5fd">531</span>
+                <span style="font-family:var(--fmono);font-size:9px;color:#a78bfa">18.2%</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:96px">Vencidos SLA</span>
+              <div style="flex:1;height:18px;background:rgba(248,113,113,.22);border-radius:3px;display:flex;align-items:center;justify-content:space-between;padding:0 7px;margin-right:34px">
+                <span style="font-family:var(--fmono);font-size:9px;color:#fca5a5">778</span>
+                <span style="font-family:var(--fmono);font-size:9px;color:#f87171">26.7%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview lado direito: aging + ranking analistas -->
+        <div style="background:var(--surf2);padding:1.6rem;display:flex;flex-direction:column;gap:.9rem">
+          <div style="font-family:var(--fmono);font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">aging por faixa de dias</div>
+
+          <!-- aging bars reais -->
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--green);min-width:42px">≤ 7 dias</span>
+              <div style="flex:1;height:14px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:27%;height:100%;background:var(--green)"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--green)">412</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--blue);min-width:42px">8–15d</span>
+              <div style="flex:1;height:14px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:42%;height:100%;background:var(--blue)"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--blue)">634</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--gold);min-width:42px">16–30d</span>
+              <div style="flex:1;height:14px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:70%;height:100%;background:var(--gold)"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--gold)">1.082</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--red);min-width:42px">&gt; 30d</span>
+              <div style="flex:1;height:14px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:52%;height:100%;background:var(--red)"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--red)">782</span>
+            </div>
+          </div>
+
+          <!-- ranking analistas por atendimentos -->
+          <div style="font-family:var(--fmono);font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:.2rem">ranking · atend. por analista</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2)">Analista 09</span>
+              <div style="flex:1;height:5px;background:var(--border);border-radius:2px;overflow:hidden;margin:0 8px"><div style="width:100%;height:100%;background:var(--purple)"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--purple)">87</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2)">Analista 02</span>
+              <div style="flex:1;height:5px;background:var(--border);border-radius:2px;overflow:hidden;margin:0 8px"><div style="width:72%;height:100%;background:var(--purple)"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--purple)">63</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2)">Analista 12</span>
+              <div style="flex:1;height:5px;background:var(--border);border-radius:2px;overflow:hidden;margin:0 8px"><div style="width:55%;height:100%;background:rgba(167,139,250,.6)"></div></div>
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2)">48</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bi-body">
+        <span class="bi-tag" style="color:var(--purple)">03 · BI Operacional · Unidas</span>
+        <div class="bi-title">Atendimentos Improdutivos</div>
+        <p class="bi-desc">Análise de atendimentos em aberto na rede de oficinas RAC. Funil detalhado por etapa (diagnóstico, aguardando peça, MO), aging por faixa de dias, ranking de analistas e 4 painéis com filtros avançados por veículo, guincho, motivo e região.</p>
+        <div class="bi-metrics">
+          <div class="bi-metric"><span class="bi-metric-v" style="color:var(--purple)">2.910</span><span class="bi-metric-l">Atendimentos</span></div>
+          <div class="bi-metric"><span class="bi-metric-v" style="color:var(--red)">26.7%</span><span class="bi-metric-l">Venc. SLA</span></div>
+          <div class="bi-metric"><span class="bi-metric-v" style="color:var(--purple)">11</span><span class="bi-metric-l">Analistas</span></div>
+          <div class="bi-metric"><span class="bi-metric-v" style="color:var(--purple)">4</span><span class="bi-metric-l">Painéis</span></div>
+        </div>
+        <div class="bi-stack">
+          <span class="bi-pill">Python</span><span class="bi-pill">Pandas</span>
+          <span class="bi-pill">Funil</span><span class="bi-pill">SLA</span><span class="bi-pill">Aging</span><span class="bi-pill">KPI</span>
+        </div>
+        <a class="bi-btn wt" href="BI_Improdutivo.html" target="_blank" style="background:var(--purple)">🔗 Abrir Dashboard</a>
+      </div>
+    </div>
+
+    <!-- ══ CARD 3: VENDAS — menor ══ -->
+    <div class="bi-card reveal" style="--c:var(--gold);grid-column:span 2">
+      <div class="bi-accent"></div>
+      <div class="bi-preview-split" style="display:grid;grid-template-columns:1fr 1fr">
+        <div style="background:var(--surf2);padding:1.4rem;border-right:1px solid var(--border)">
+          <div style="font-family:var(--fmono);font-size:9px;color:var(--muted);margin-bottom:.8rem;letter-spacing:1px;text-transform:uppercase">receita por canal · 2020–2022</div>
+          <div class="bi-bar-row">
+            <span class="bi-bar-label">Online</span>
+            <div class="bi-bar-track"><div class="bi-bar-fill" style="width:88%;background:var(--gold)"></div></div>
+            <span class="bi-bar-val" style="color:var(--gold)">R$13.2M</span>
+          </div>
+          <div class="bi-bar-row">
+            <span class="bi-bar-label">Físico</span>
+            <div class="bi-bar-track"><div class="bi-bar-fill" style="width:12%;background:var(--gold2)"></div></div>
+            <span class="bi-bar-val" style="color:var(--gold2)">R$1.8M</span>
+          </div>
+          <div class="bi-bar-row">
+            <span class="bi-bar-label">Margem</span>
+            <div class="bi-bar-track"><div class="bi-bar-fill" style="width:74%;background:var(--green)"></div></div>
+            <span class="bi-bar-val" style="color:var(--green)">74.6%</span>
+          </div>
+          <div class="bi-bar-row">
+            <span class="bi-bar-label">Devoluções</span>
+            <div class="bi-bar-track"><div class="bi-bar-fill" style="width:14%;background:var(--red)"></div></div>
+            <span class="bi-bar-val" style="color:var(--red)">14.2%</span>
+          </div>
+        </div>
+        <div style="background:var(--surf2);padding:1.4rem">
+          <div style="font-family:var(--fmono);font-size:9px;color:var(--muted);margin-bottom:.8rem;letter-spacing:1px;text-transform:uppercase">crescimento anual</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:28px">2020</span>
+              <div style="flex:1;height:12px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:20%;height:100%;background:rgba(240,180,41,.5)"></div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:28px">2021</span>
+              <div style="flex:1;height:12px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:55%;height:100%;background:rgba(240,180,41,.7)"></div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--fmono);font-size:9px;color:var(--muted2);min-width:28px">2022</span>
+              <div style="flex:1;height:12px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:100%;height:100%;background:var(--gold)"></div></div>
+            </div>
+          </div>
+          <div style="margin-top:.8rem;font-family:var(--fhead);font-size:20px;font-weight:800;color:var(--gold)">+223%</div>
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">crescimento total</div>
+        </div>
+      </div>
+      <div class="bi-body">
+        <span class="bi-tag">01 · Análise Comercial</span>
+        <div class="bi-title">Análise de Vendas Hive Participações</div>
+        <p class="bi-desc">Performance comercial com receita de R$15M, margem de 74.6%, ranking de produtos e marcas, distribuição geográfica global e análise de devoluções por motivo.</p>
+        <div class="bi-metrics">
+          <div class="bi-metric"><span class="bi-metric-v">R$15M</span><span class="bi-metric-l">Receita</span></div>
+          <div class="bi-metric"><span class="bi-metric-v">25K</span><span class="bi-metric-l">Pedidos</span></div>
+          <div class="bi-metric"><span class="bi-metric-v">74.6%</span><span class="bi-metric-l">Margem</span></div>
+          <div class="bi-metric"><span class="bi-metric-v">+223%</span><span class="bi-metric-l">Crescimento</span></div>
+        </div>
+        <div class="bi-stack">
+          <span class="bi-pill">Python</span><span class="bi-pill">Pandas</span>
+          <span class="bi-pill">Chart.js</span><span class="bi-pill">KPI</span><span class="bi-pill">Geográfico</span>
+        </div>
+        <a class="bi-btn" href="Vendas.html" target="_blank">🔗 Abrir Dashboard</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPANIES WALL -->
+<div class="companies-wall reveal">
+  <div class="companies-inner">
+    <div class="companies-label">Empresas onde atuei</div>
+    <div class="companies-grid">
+
+      <div class="company-chip" style="--chip-c:var(--gold)">
+        <div class="chip-dot" style="background:var(--gold)"></div>
+        <span class="chip-name">Unidas</span>
+        <span class="chip-role">Dados Sr</span>
+        <span class="chip-period">2025 →</span>
+      </div>
+
+      <div class="company-chip" style="--chip-c:var(--blue)">
+        <div class="chip-dot" style="background:var(--blue)"></div>
+        <span class="chip-name">Nova Gestões</span>
+        <span class="chip-role">Dados Pl</span>
+        <span class="chip-period">2024–25</span>
+      </div>
+
+      <div class="company-chip" style="--chip-c:var(--green)">
+        <div class="chip-dot" style="background:var(--green)"></div>
+        <span class="chip-name">Britânia</span>
+        <span class="chip-role">Dados Jr</span>
+        <span class="chip-period">2022–24</span>
+      </div>
+
+
+
     </div>
   </div>
+</div>
 
-  <!-- Card 3: Improdutivo -->
-  <div class="pcard" style="--c:var(--purple)">
-    <div class="pcard-top"></div>
-    <div class="pcard-body">
-      <div class="pcard-num">03 &middot; BI Operacional</div>
-      <div class="pcard-icon">&#x1F527;</div>
-      <div class="pcard-title">Atendimentos Improdutivos</div>
-      <div class="pcard-sub">Oficinas RAC &middot; Em Aberto</div>
-      <p class="pcard-desc">An&aacute;lise de atendimentos em aberto e improdutivos em rede de oficinas. Funil de atendimento com aging por etapa, complexidade e SLA, ranking de analistas e painel detalhado com filtros avan&ccedil;ados por tipo de ve&iacute;culo, guincho, motivo e regi&atilde;o.</p>
-      <div class="pcard-stats">
-        <div class="pstat"><span class="pstat-v">2.910</span><span class="pstat-l">Atendimentos</span></div>
-        <div class="pstat"><span class="pstat-v">11</span><span class="pstat-l">Analistas</span></div>
-        <div class="pstat"><span class="pstat-v">4</span><span class="pstat-l">Pain&eacute;is</span></div>
-      </div>
-      <div class="pcard-tags">
-        <span class="ptag">Python</span><span class="ptag">Pandas</span>
-        <span class="ptag">Chart.js</span><span class="ptag">KPI</span>
-        <span class="ptag">Manuten&ccedil;&atilde;o</span><span class="ptag">Funil</span>
-      </div>
-    </div>
-    <div class="pcard-foot">
-      <a class="pcard-btn wt" href="BI_Improdutivo.html" target="_blank" style="background:var(--purple)">&#x1F517; Abrir Dashboard</a>
-    </div>
+<!-- SKILLS SECTION -->
+<section class="section" id="habilidades" style="padding-bottom:2rem">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Habilidades Técnicas</h2>
+    <div class="section-line"></div>
   </div>
 
-</div>
+  <div class="skills-grid reveal">
 
-<!-- DIVIDER CURRÍCULO -->
-<div class="divider" style="padding-top:1rem">
-  <span class="divider-label">Curr&iacute;culo</span>
-  <div class="divider-line"></div>
-</div>
+    <!-- BI & Dados -->
+    <div class="sk-card" style="--sk:var(--gold)">
+      <div class="sk-top"></div>
+      <div class="sk-icon">📊</div>
+      <div class="sk-cat">BI &amp; Dados</div>
+      <div class="sk-items">
+        <div class="sk-item">
+          <span class="sk-name">Power BI</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:95%"></div></div>
+          <span class="sk-lvl" style="color:var(--gold)">Expert</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">DAX</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:92%"></div></div>
+          <span class="sk-lvl" style="color:var(--gold)">Expert</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Power Query</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:90%"></div></div>
+          <span class="sk-lvl" style="color:var(--gold)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Modelagem Dimensional</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:85%"></div></div>
+          <span class="sk-lvl" style="color:var(--gold)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">DirectQuery</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:80%"></div></div>
+          <span class="sk-lvl" style="color:var(--muted2)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Excel Avançado</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:92%"></div></div>
+          <span class="sk-lvl" style="color:var(--gold)">Expert</span>
+        </div>
+      </div>
+    </div>
 
-<!-- CV SECTION -->
-<section class="cv-section">
+    <!-- Python & Automação -->
+    <div class="sk-card" style="--sk:var(--green)">
+      <div class="sk-top" style="background:var(--green)"></div>
+      <div class="sk-icon">🐍</div>
+      <div class="sk-cat">Python &amp; Automação</div>
+      <div class="sk-items">
+        <div class="sk-item">
+          <span class="sk-name">Python 3</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:90%;background:var(--green)"></div></div>
+          <span class="sk-lvl" style="color:var(--green)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Pandas / NumPy</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:90%;background:var(--green)"></div></div>
+          <span class="sk-lvl" style="color:var(--green)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">ETL / Pipelines</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:88%;background:var(--green)"></div></div>
+          <span class="sk-lvl" style="color:var(--green)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Automação de relatórios</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:90%;background:var(--green)"></div></div>
+          <span class="sk-lvl" style="color:var(--green)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">IA Aplicada a dados</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:72%;background:var(--green)"></div></div>
+          <span class="sk-lvl" style="color:var(--muted2)">Intermediário</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">openpyxl / Chart.js</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:85%;background:var(--green)"></div></div>
+          <span class="sk-lvl" style="color:var(--green)">Avançado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integração & APIs -->
+    <div class="sk-card" style="--sk:var(--blue)">
+      <div class="sk-top" style="background:var(--blue)"></div>
+      <div class="sk-icon">🔌</div>
+      <div class="sk-cat">Integração &amp; APIs</div>
+      <div class="sk-items">
+        <div class="sk-item">
+          <span class="sk-name">APIs REST</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:80%;background:var(--blue)"></div></div>
+          <span class="sk-lvl" style="color:var(--blue)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">OAuth 2.0</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:78%;background:var(--blue)"></div></div>
+          <span class="sk-lvl" style="color:var(--blue)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">SharePoint</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:75%;background:var(--blue)"></div></div>
+          <span class="sk-lvl" style="color:var(--muted2)">Intermediário</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">SQL / MySQL</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:80%;background:var(--blue)"></div></div>
+          <span class="sk-lvl" style="color:var(--blue)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">HTML + CSS + JS</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:82%;background:var(--blue)"></div></div>
+          <span class="sk-lvl" style="color:var(--blue)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Integração de sistemas</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:78%;background:var(--blue)"></div></div>
+          <span class="sk-lvl" style="color:var(--blue)">Avançado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manipulação de Dados -->
+    <div class="sk-card" style="--sk:var(--purple)">
+      <div class="sk-top" style="background:var(--purple)"></div>
+      <div class="sk-icon">🗂️</div>
+      <div class="sk-cat">Manipulação de Dados</div>
+      <div class="sk-items">
+        <div class="sk-item">
+          <span class="sk-name">CSV / Excel</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:95%;background:var(--purple)"></div></div>
+          <span class="sk-lvl" style="color:var(--purple)">Expert</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Extração de PDF</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:85%;background:var(--purple)"></div></div>
+          <span class="sk-lvl" style="color:var(--purple)">Avançado</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Limpeza e transformação</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:92%;background:var(--purple)"></div></div>
+          <span class="sk-lvl" style="color:var(--purple)">Expert</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Dashboards HTML offline</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:92%;background:var(--purple)"></div></div>
+          <span class="sk-lvl" style="color:var(--purple)">Expert</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Relatórios executivos</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:90%;background:var(--purple)"></div></div>
+          <span class="sk-lvl" style="color:var(--purple)">Expert</span>
+        </div>
+        <div class="sk-item">
+          <span class="sk-name">Análise estatística</span>
+          <div class="sk-bar"><div class="sk-fill" style="width:78%;background:var(--purple)"></div></div>
+          <span class="sk-lvl" style="color:var(--muted2)">Avançado</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CURRÍCULO -->
+<section class="section" id="experiencia">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Experiência</h2>
+    <div class="section-line"></div>
+  </div>
+
   <div class="cv-grid">
+    <!-- Timeline -->
+    <div class="timeline reveal">
 
-    <!-- Timeline de experiências -->
-    <div>
-      <div class="cv-timeline">
-
-        <div class="cv-job">
-          <div class="cv-dot"></div>
-          <div class="cv-job-content">
-            <div class="cv-job-header">
-              <div class="cv-job-title">Analista de Dados S&ecirc;nior</div>
-              <span class="cv-job-period">2025 &ndash; Atual</span>
-            </div>
-            <div class="cv-job-company">Unidas</div>
-            <div class="cv-job-items">
-              <div class="cv-item">Desenvolvimento de dashboards executivos em Power BI</div>
-              <div class="cv-item">Arquitetura de pipelines automatizados em Python</div>
-              <div class="cv-item">Integra&ccedil;&atilde;o com APIs REST e OAuth 2.0</div>
-              <div class="cv-item">Cria&ccedil;&atilde;o de solu&ccedil;&otilde;es digitais automatizadas</div>
-              <div class="cv-item">Gera&ccedil;&atilde;o de relat&oacute;rios estrat&eacute;gicos para lideran&ccedil;a</div>
-            </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="--dot-c:var(--gold)"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div class="tl-title">Analista de Dados Sênior</div>
+            <span class="tl-badge">Mai 2025 – Atual</span>
           </div>
-        </div>
-
-        <div class="cv-job">
-          <div class="cv-dot blue"></div>
-          <div class="cv-job-content">
-            <div class="cv-job-header">
-              <div class="cv-job-title">Analista de Dados</div>
-              <span class="cv-job-period blue">2024 &ndash; 2025</span>
-            </div>
-            <div class="cv-job-company">Nova Gest&otilde;es</div>
-            <div class="cv-job-items">
-              <div class="cv-item">Desenvolvimento de BI com Power BI, DAX e Power Query</div>
-              <div class="cv-item">Processos de ETL com MySQL</div>
-              <div class="cv-item">Cria&ccedil;&atilde;o de dashboards gerenciais</div>
-            </div>
+          <div class="tl-company">Unidas Locações e Serviços S/A · Curitiba</div>
+          <div class="tl-items">
+            <div class="tl-point">Desenvolvimento de dashboards executivos e operacionais em Power BI</div>
+            <div class="tl-point">Arquitetura de pipelines automatizados em Python com integração via APIs REST</div>
+            <div class="tl-point">Criação de soluções HTML autossuficientes para relatórios distribuídos</div>
+            <div class="tl-point">Geração de relatórios estratégicos para liderança da rede de oficinas</div>
           </div>
+          <div class="tl-promo">↑ Promoção PL → SR em menos de 1 ano</div>
         </div>
-
-        <div class="cv-job">
-          <div class="cv-dot purple"></div>
-          <div class="cv-job-content">
-            <div class="cv-job-header">
-              <div class="cv-job-title">Analista de Dados</div>
-              <span class="cv-job-period purple">2024</span>
-            </div>
-            <div class="cv-job-company">Brit&acirc;nia</div>
-            <div class="cv-job-items">
-              <div class="cv-item">Constru&ccedil;&atilde;o de dashboards e an&aacute;lises estrat&eacute;gicas</div>
-              <div class="cv-item">Apoio &agrave; tomada de decis&atilde;o baseada em dados</div>
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <div class="tl-item">
+        <div class="tl-dot" style="--dot-c:var(--blue)"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div class="tl-title">Analista de Dados Pleno</div>
+            <span class="tl-badge" style="border-color:rgba(56,189,248,.3);color:var(--blue)">Dez 2024 – Mai 2025</span>
+          </div>
+          <div class="tl-company">Nova Gestões · Curitiba</div>
+          <div class="tl-items">
+            <div class="tl-point" style="--dot-c:var(--blue)">Desenvolvimento de BI com Power BI, DAX e Power Query</div>
+            <div class="tl-point" style="--dot-c:var(--blue)">Processos de ETL com MySQL e automação de relatórios</div>
+            <div class="tl-point" style="--dot-c:var(--blue)">Criação de dashboards gerenciais para cobrança extrajudicial</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot" style="--dot-c:var(--green)"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div class="tl-title">Analista de Dados Júnior</div>
+            <span class="tl-badge" style="border-color:rgba(52,211,153,.3);color:var(--green)">Mar 2022 – Out 2024</span>
+          </div>
+          <div class="tl-company">Britânia Eletrodomésticos S.A. · Curitiba</div>
+          <div class="tl-items">
+            <div class="tl-point">Construção de dashboards e análises estratégicas de vendas e estoque</div>
+            <div class="tl-point">Apoio à tomada de decisão baseada em dados para diretoria</div>
+            <div class="tl-point">Progressão: Assistente Back Office I → II → Analista Jr</div>
+          </div>
+        </div>
+      </div>
+
+
+
     </div>
 
     <!-- Sidebar -->
-    <div class="cv-sidebar">
-
+    <div>
       <!-- Contato -->
-      <div class="cv-box">
-        <div class="cv-box-title">Contato</div>
-        <div class="contact-row"><span class="contact-icon">&#x1F4CD;</span>Arauc&aacute;ria / PR</div>
-        <div class="contact-row"><span class="contact-icon">&#x1F4DE;</span>+55 41 98515-3879</div>
-        <div class="contact-row"><span class="contact-icon">&#x2709;&#xFE0F;</span><a href="mailto:augustobuenodeoliveira@gmail.com">augustobuenodeoliveira@gmail.com</a></div>
-        <div class="contact-row"><span class="contact-icon">&#x1F517;</span><a href="https://www.linkedin.com/in/augusto-bueno-de-oliveira-bb2987328" target="_blank">LinkedIn</a></div>
+      <div class="skills-box reveal" id="contato">
+        <div class="box-title">Contato</div>
+        <div class="contact-row"><span class="ci">📍</span>Araucária / PR</div>
+        <div class="contact-row"><span class="ci">📞</span>+55 41 98515-3879</div>
+        <div class="contact-row"><span class="ci">✉️</span><a href="mailto:augustobuenodeoliveira@gmail.com">augustobuenodeoliveira@gmail.com</a></div>
+        <div class="contact-row"><span class="ci">🔗</span><a href="https://www.linkedin.com/in/augusto-bueno-de-oliveira-bb2987328" target="_blank">LinkedIn</a></div>
       </div>
 
       <!-- Habilidades -->
-      <div class="cv-box">
-        <div class="cv-box-title">Habilidades</div>
-        <div class="skill-row"><span class="skill-name">Power BI / DAX</span><div class="skill-bar"><div class="skill-fill" style="width:95%;background:var(--accent)"></div></div><span class="skill-pct">95%</span></div>
-        <div class="skill-row"><span class="skill-name">Python / Pandas</span><div class="skill-bar"><div class="skill-fill" style="width:90%;background:var(--green)"></div></div><span class="skill-pct">90%</span></div>
-        <div class="skill-row"><span class="skill-name">Excel Avan&ccedil;ado</span><div class="skill-bar"><div class="skill-fill" style="width:92%;background:var(--blue)"></div></div><span class="skill-pct">92%</span></div>
-        <div class="skill-row"><span class="skill-name">SQL / MySQL</span><div class="skill-bar"><div class="skill-fill" style="width:80%;background:var(--purple)"></div></div><span class="skill-pct">80%</span></div>
-        <div class="skill-row"><span class="skill-name">APIs REST</span><div class="skill-bar"><div class="skill-fill" style="width:75%;background:var(--accent)"></div></div><span class="skill-pct">75%</span></div>
-        <div class="skill-row"><span class="skill-name">ETL / Pipelines</span><div class="skill-bar"><div class="skill-fill" style="width:85%;background:var(--green)"></div></div><span class="skill-pct">85%</span></div>
+      <div class="skills-box reveal">
+        <div class="box-title">Habilidades</div>
+        <div class="skill-row"><span class="skill-name">Power BI / DAX</span><div class="skill-bar"><div class="skill-fill" style="width:95%;--sc:var(--gold)"></div></div><span class="skill-pct">95%</span></div>
+        <div class="skill-row"><span class="skill-name">Excel Avançado</span><div class="skill-bar"><div class="skill-fill" style="width:92%;--sc:var(--gold)"></div></div><span class="skill-pct">92%</span></div>
+        <div class="skill-row"><span class="skill-name">Python / Pandas</span><div class="skill-bar"><div class="skill-fill" style="width:90%;--sc:var(--green)"></div></div><span class="skill-pct">90%</span></div>
+        <div class="skill-row"><span class="skill-name">Power Query</span><div class="skill-bar"><div class="skill-fill" style="width:90%;--sc:var(--gold)"></div></div><span class="skill-pct">90%</span></div>
+        <div class="skill-row"><span class="skill-name">ETL / Pipelines</span><div class="skill-bar"><div class="skill-fill" style="width:88%;--sc:var(--green)"></div></div><span class="skill-pct">88%</span></div>
+        <div class="skill-row"><span class="skill-name">SQL / MySQL</span><div class="skill-bar"><div class="skill-fill" style="width:80%;--sc:var(--blue)"></div></div><span class="skill-pct">80%</span></div>
+        <div class="skill-row"><span class="skill-name">APIs REST / OAuth 2.0</span><div class="skill-bar"><div class="skill-fill" style="width:79%;--sc:var(--blue)"></div></div><span class="skill-pct">79%</span></div>
+        <div class="skill-row"><span class="skill-name">SharePoint</span><div class="skill-bar"><div class="skill-fill" style="width:75%;--sc:var(--blue)"></div></div><span class="skill-pct">75%</span></div>
+        <div class="skill-row"><span class="skill-name">HTML / CSS / JS</span><div class="skill-bar"><div class="skill-fill" style="width:82%;--sc:var(--purple)"></div></div><span class="skill-pct">82%</span></div>
+        <div class="skill-row"><span class="skill-name">IA Aplicada a dados</span><div class="skill-bar"><div class="skill-fill" style="width:72%;--sc:var(--green)"></div></div><span class="skill-pct">72%</span></div>
       </div>
 
       <!-- Formação -->
-      <div class="cv-box">
-        <div class="cv-box-title">Forma&ccedil;&atilde;o</div>
-        <div class="edu-title">Tecn&oacute;logo em An&aacute;lise de Sistemas &amp; TI</div>
+      <div class="skills-box reveal">
+        <div class="box-title">Formação</div>
+        <div class="edu-title">Tecnólogo em Análise de Sistemas &amp; TI</div>
         <div class="edu-item">Faculdade Educacional da Lapa</div>
-        <div class="edu-period">2017 &ndash; 2020</div>
+        <div class="edu-period">2017 – 2020</div>
       </div>
-
     </div>
   </div>
 </section>
 
-
+<!-- ABOUT -->
+<div class="about-strip reveal">
   <div class="about-inner">
     <div class="about-left">
-      <div class="about-name">Sobre o Portf&oacute;lio</div>
-      <p class="about-text">Todos os dashboards s&atilde;o arquivos HTML autossuficientes &mdash; sem depend&ecirc;ncia de servidores, bancos de dados ou licen&ccedil;as de ferramentas de BI. Os dados s&atilde;o processados em Python/Pandas e embutidos diretamente no HTML, gerando relat&oacute;rios que funcionam offline e podem ser compartilhados por e-mail ou hospedados em qualquer servidor est&aacute;tico.</p>
+      <div class="about-name">Sobre este portfólio</div>
+      <p class="about-text">
+        Todos os dashboards são arquivos HTML autossuficientes — sem dependência de servidores, bancos de dados ou licenças de ferramentas de BI.
+        Os dados são processados em Python/Pandas e embutidos diretamente no HTML, gerando relatórios que funcionam offline e podem ser compartilhados por e-mail ou hospedados em qualquer servidor estático.
+      </p>
       <div class="about-tools">
         <span class="atool">Python 3</span><span class="atool">Pandas</span>
-        <span class="atool">NumPy</span><span class="atool">Excel / openpyxl</span>
+        <span class="atool">NumPy</span><span class="atool">Power BI</span>
+        <span class="atool">DAX</span><span class="atool">Power Query</span>
+        <span class="atool">Excel / openpyxl</span>
         <span class="atool">Chart.js</span><span class="atool">HTML + CSS + JS</span>
       </div>
     </div>
   </div>
 </div>
 
-<footer>Augusto Oliveira &middot; Analista de Dados &middot; <span style="color:var(--accent)">2026</span></footer>
+<footer>Augusto Oliveira · Analista de Dados &amp; BI · <span style="color:var(--gold)">2026</span></footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+function toggleNav(){
+  const links=document.getElementById('nav-links');
+  const ham=document.getElementById('nav-ham');
+  links.classList.toggle('open');
+  ham.classList.toggle('open');
+}
+function closeNav(){
+  document.getElementById('nav-links').classList.remove('open');
+  document.getElementById('nav-ham').classList.remove('open');
+}
+</script>
 </body>
 </html>
